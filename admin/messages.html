@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Template Pesan - Naufal Gaming Studio</title>
+    <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body>
+    <div class="admin-wrapper">
+        <aside class="admin-sidebar" id="adminSidebar">
+            <div class="sidebar-logo">
+                <div class="admin-avatar" style="width: 36px; height: 36px;">N</div>
+                <span>NAUFAL <em>STUDIO</em></span>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <div class="sidebar-section-label">Main Menu</div>
+                <a href="dashboard.html">
+                    <div class="nav-icon">📊</div>
+                    <span>Dashboard</span>
+                </a>
+                <a href="games.html">
+                    <div class="nav-icon">🎮</div>
+                    <span>Games</span>
+                </a>
+                <a href="categories.html">
+                    <div class="nav-icon">📁</div>
+                    <span>Categories</span>
+                </a>
+                <a href="products.html">
+                    <div class="nav-icon">💎</div>
+                    <span>Products</span>
+                </a>
+                
+                <div class="sidebar-section-label">Media & Assets</div>
+                <a href="icons.html">
+                    <div class="nav-icon">🖼️</div>
+                    <span>Icons</span>
+                </a>
+                <a href="banners.html">
+                    <div class="nav-icon">🎞️</div>
+                    <span>Banners</span>
+                </a>
+                <a href="socials.html">
+                    <div class="nav-icon">🌐</div>
+                    <span>Socials</span>
+                </a>
+
+                <div class="sidebar-section-label">Configuration</div>
+                <a href="messages.html" class="active">
+                    <div class="nav-icon">✉️</div>
+                    <span>Messages</span>
+                </a>
+                <a href="whatsapp.html">
+                    <div class="nav-icon">📱</div>
+                    <span>WhatsApp</span>
+                </a>
+                <a href="contact-edit.html">
+                    <div class="nav-icon">📞</div>
+                    <span>Contact Info</span>
+                </a>
+                <a href="settings.html">
+                    <div class="nav-icon">⚙️</div>
+                    <span>Settings</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button class="btn-logout-sidebar" id="btnLogoutSidebar">
+                    <span>🚪</span> Logout
+                </button>
+            </div>
+        </aside>
+
+        <main class="admin-main">
+            <header class="admin-topbar">
+                <div class="topbar-left">
+                    <button class="btn-menu-toggle" id="menuToggle">☰</button>
+                    <h1 class="topbar-title">WhatsApp Message Template</h1>
+                </div>
+                <div class="topbar-right">
+                    <div class="admin-info">
+                        <div class="admin-avatar">N</div>
+                        <span class="admin-name">Admin</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="admin-content fade-in">
+                <div class="page-header">
+                    <div>
+                        <h2 class="page-title">Format Pesan Otomatis</h2>
+                        <p class="page-subtitle">Atur bagaimana format pesan yang dikirim pelanggan ke WhatsApp Anda</p>
+                    </div>
+                </div>
+
+                <div class="table-container" style="padding: 32px; max-width: 800px;">
+                    <form id="formMessage">
+                        <div class="form-group">
+                            <label class="form-label" for="messageTemplate">Template Pesan WhatsApp</label>
+                            <textarea id="messageTemplate" class="form-control" style="height: 250px; font-family: monospace; line-height: 1.6; resize: none;"></textarea>
+                            <div style="margin-top: 12px; padding: 12px; background: rgba(124, 58, 237, 0.1); border-radius: 8px; border: 1px solid var(--border-color);">
+                                <p class="text-muted" style="font-size: 12px; margin-bottom: 8px;"><strong>Variabel yang Tersedia:</strong></p>
+                                <div class="flex gap-8 flex-wrap">
+                                    <code style="color: var(--color-purple-light); font-size: 11px; background: rgba(0,0,0,0.2); padding: 2px 6px; border-radius: 4px;">{gameName}</code>
+                                    <code style="color: var(--color-purple-light); font-size: 11px; background: rgba(0,0,0,0.2); padding: 2px 6px; border-radius: 4px;">{userId}</code>
+                                    <code style="color: var(--color-purple-light); font-size: 11px; background: rgba(0,0,0,0.2); padding: 2px 6px; border-radius: 4px;">{productName}</code>
+                                </div>
+                                <p class="text-muted" style="font-size: 11px; margin-top: 8px;">Jangan mengubah kata di dalam kurung kurawal <code style="color: var(--color-purple-light);">{ }</code> agar sistem tetap bisa mengisi data otomatis.</p>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; justify-content: flex-end; margin-top: 24px;">
+                            <button type="submit" id="btnSubmit" class="btn btn-primary" style="padding: 12px 32px;">
+                                Simpan Perubahan Template
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <script type="module" src="../js/admin/messages.js"></script>
+    <script>
+        const menuToggle = document.getElementById('menuToggle');
+        const adminSidebar = document.getElementById('adminSidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+        if(menuToggle) {
+            menuToggle.onclick = () => {
+                adminSidebar.classList.toggle('open');
+                sidebarOverlay.classList.toggle('active');
+            };
+        }
+        if(sidebarOverlay) {
+            sidebarOverlay.onclick = () => {
+                adminSidebar.classList.remove('open');
+                sidebarOverlay.classList.remove('active');
+            };
+        }
+    </script>
+</body>
+</html>
