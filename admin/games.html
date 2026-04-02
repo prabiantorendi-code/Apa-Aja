@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kelola Game - Naufal Gaming Studio</title>
+    <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body>
+    <div class="admin-wrapper">
+        <aside class="admin-sidebar" id="adminSidebar">
+            <div class="sidebar-logo">
+                <div class="admin-avatar" style="width: 36px; height: 36px;">N</div>
+                <span>NAUFAL <em>STUDIO</em></span>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <div class="sidebar-section-label">Main Menu</div>
+                <a href="dashboard.html">
+                    <div class="nav-icon">📊</div>
+                    <span>Dashboard</span>
+                </a>
+                <a href="games.html" class="active">
+                    <div class="nav-icon">🎮</div>
+                    <span>Games</span>
+                </a>
+                <a href="categories.html">
+                    <div class="nav-icon">📁</div>
+                    <span>Categories</span>
+                </a>
+                <a href="products.html">
+                    <div class="nav-icon">💎</div>
+                    <span>Products</span>
+                </a>
+                
+                <div class="sidebar-section-label">Media & Assets</div>
+                <a href="icons.html">
+                    <div class="nav-icon">🖼️</div>
+                    <span>Icons</span>
+                </a>
+                <a href="banners.html">
+                    <div class="nav-icon">🎞️</div>
+                    <span>Banners</span>
+                </a>
+                <a href="socials.html">
+                    <div class="nav-icon">🌐</div>
+                    <span>Socials</span>
+                </a>
+
+                <div class="sidebar-section-label">Configuration</div>
+                <a href="messages.html">
+                    <div class="nav-icon">✉️</div>
+                    <span>Messages</span>
+                </a>
+                <a href="whatsapp.html">
+                    <div class="nav-icon">📱</div>
+                    <span>WhatsApp</span>
+                </a>
+                <a href="contact-edit.html">
+                    <div class="nav-icon">📞</div>
+                    <span>Contact Info</span>
+                </a>
+                <a href="settings.html">
+                    <div class="nav-icon">⚙️</div>
+                    <span>Settings</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button class="btn-logout-sidebar" id="btnLogoutSidebar">
+                    <span>🚪</span> Logout
+                </button>
+            </div>
+        </aside>
+
+        <main class="admin-main">
+            <header class="admin-topbar">
+                <div class="topbar-left">
+                    <button class="btn-menu-toggle" id="menuToggle">☰</button>
+                    <h1 class="topbar-title">Manage Games</h1>
+                </div>
+                <div class="topbar-right">
+                    <div class="admin-info">
+                        <div class="admin-avatar">N</div>
+                        <span class="admin-name">Admin</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="admin-content fade-in">
+                <div class="page-header">
+                    <div>
+                        <h2 class="page-title">Daftar Game</h2>
+                        <p class="page-subtitle">Kelola semua game yang tersedia untuk top-up</p>
+                    </div>
+                    <button class="btn btn-primary" id="btnAddNew">
+                        <span>+</span> Tambah Game Baru
+                    </button>
+                </div>
+
+                <div class="table-container">
+                    <div class="table-header">
+                        <h3 class="table-title">Semua Game</h3>
+                        <div class="table-search">
+                            <span class="search-icon">🔍</span>
+                            <input type="text" id="tableSearch" placeholder="Cari nama game...">
+                        </div>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Icon</th>
+                                <th>Nama Game</th>
+                                <th>Kategori</th>
+                                <th>Urutan</th>
+                                <th>Status</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="gamesTableBody">
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="modal-overlay" id="modalGame">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Tambah Game</h3>
+                <button class="btn-modal-close" id="btnCloseModal">✕</button>
+            </div>
+            <form id="formGame">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label">Icon Game <span class="required">*</span></label>
+                        <div class="upload-area" onclick="document.getElementById('gameIconFile').click()">
+                            <input type="file" id="gameIconFile" hidden accept="image/*">
+                            <div class="upload-icon">🖼️</div>
+                            <p class="upload-text">Klik untuk <span>pilih file</span> icon game</p>
+                            <div class="upload-preview" id="iconPreviewContainer">
+                                <img id="iconPreview" src="" style="display: none;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="gameName">Nama Game <span class="required">*</span></label>
+                        <input type="text" id="gameName" class="form-control" placeholder="Contoh: Mobile Legends" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="gameCategory">Kategori <span class="required">*</span></label>
+                            <select id="gameCategory" class="form-control" required>
+                                <option value="">Pilih Kategori</option>
+                                </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="gameOrder">Urutan Tampil</label>
+                            <input type="number" id="gameOrder" class="form-control" value="0">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" style="display: flex; align-items: center; justify-content: space-between; cursor: pointer;">
+                            Status Aktif
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="gameStatus" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="document.getElementById('btnCloseModal').click()">Batal</button>
+                    <button type="submit" id="btnSubmit" class="btn btn-primary">Simpan Game</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <script type="module" src="../js/admin/games.js"></script>
+    <script>
+        // Responsive Sidebar Toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const adminSidebar = document.getElementById('adminSidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+        if(menuToggle) {
+            menuToggle.onclick = () => {
+                adminSidebar.classList.toggle('open');
+                sidebarOverlay.classList.toggle('active');
+            };
+        }
+        if(sidebarOverlay) {
+            sidebarOverlay.onclick = () => {
+                adminSidebar.classList.remove('open');
+                sidebarOverlay.classList.remove('active');
+            };
+        }
+
+        // Real-time Table Search (Simple Filter)
+        document.getElementById('tableSearch').onkeyup = function() {
+            let filter = this.value.toUpperCase();
+            let rows = document.getElementById("gamesTableBody").getElementsByTagName("tr");
+            for (let i = 0; i < rows.length; i++) {
+                let td = rows[i].getElementsByTagName("td")[1];
+                if (td) {
+                    let textValue = td.textContent || td.innerText;
+                    rows[i].style.display = textValue.toUpperCase().indexOf(filter) > -1 ? "" : "none";
+                }
+            }
+        }
+    </script>
+</body>
+</html>
