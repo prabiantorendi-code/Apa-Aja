@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Admin - Naufal Gaming Studio</title>
+    <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body>
+    <div class="login-page">
+        <div class="login-card fade-in">
+            <div class="login-logo">
+                <div class="admin-avatar" style="width: 64px; height: 64px; font-size: 24px; margin: 0 auto 16px;">N</div>
+            </div>
+            <h1 class="login-title">Admin Panel</h1>
+            <p class="login-subtitle">Silakan masuk untuk mengelola website</p>
+
+            <form id="formLogin">
+                <div class="form-group">
+                    <label class="form-label" for="email">Email Address</label>
+                    <input type="email" id="email" class="form-control" placeholder="admin@example.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="password">Password</label>
+                    <div class="input-password-wrapper">
+                        <input type="password" id="password" class="form-control" placeholder="••••••••" required>
+                        <button type="button" class="btn-toggle-password" id="togglePassword">
+                            👁️
+                        </button>
+                    </div>
+                </div>
+
+                <div id="loginError" class="form-error-msg" style="display: none; margin-bottom: 16px;">
+                    <span>⚠️</span> <span id="errorText">Email atau password salah!</span>
+                </div>
+
+                <button type="submit" id="btnLogin" class="btn btn-primary w-full">
+                    Masuk Sekarang
+                </button>
+            </form>
+
+            <div class="login-back-link">
+                <a href="../index.html">← Kembali ke Website Utama</a>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { loginAdmin, checkAuthState } from "../js/auth.js";
+
+        // Cek jika sudah login, langsung lempar ke dashboard
+        checkAuthState(false, "dashboard.html");
+
+        const form = document.getElementById("formLogin");
+        const btnLogin = document.getElementById("btnLogin");
+        const errorDiv = document.getElementById("loginError");
+        const errorText = document.getElementById("errorText");
+        const togglePass = document.getElementById("togglePassword");
+        const passwordInput = document.getElementById("password");
+
+        // Toggle View Password
+        togglePass.addEventListener("click", () => {
+            const type = passwordInput.getAttribute("type") === "password" ? "text" : "password";
+            passwordInput.setAttribute("type", type);
+        });
+
+        // Handle Login
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById("email").value;
+            const password = passwordInput.value;
+
+            errorDiv.style.display = "none";
+            btnLogin.classList.add("btn-loading");
+            btnLogin.disabled = true;
+
+            const result = await loginAdmin(email, password);
+
+            if (result.success) {
+                window.location.href = "dashboard.html";
+            } else {
+                errorText.innerText = result.message;
+                errorDiv.style.display = "flex";
+                btnLogin.classList.remove("btn-loading");
+                btnLogin.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>
+
