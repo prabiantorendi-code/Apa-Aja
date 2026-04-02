@@ -1,7 +1,7 @@
 /* js/admin/settings.js */
 import { db, auth } from "../firebase-config.js";
-import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
-import { updatePassword } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { updatePassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { checkAuthState, logoutAdmin } from "../auth.js";
 
 // Pastikan admin login
