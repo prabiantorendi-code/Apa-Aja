@@ -1,6 +1,6 @@
 /* js/auth.js */
 import { auth } from "./firebase-config.js";
-import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 export function checkAuthState(requireAuth = false, redirectUrl = "login.html") {
     onAuthStateChanged(auth, (user) => {
