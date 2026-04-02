@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kelola Produk - Naufal Gaming Studio</title>
+    <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body>
+    <div class="admin-wrapper">
+        <aside class="admin-sidebar" id="adminSidebar">
+            <div class="sidebar-logo">
+                <div class="admin-avatar" style="width: 36px; height: 36px;">N</div>
+                <span>NAUFAL <em>STUDIO</em></span>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <div class="sidebar-section-label">Main Menu</div>
+                <a href="dashboard.html">
+                    <div class="nav-icon">📊</div>
+                    <span>Dashboard</span>
+                </a>
+                <a href="games.html">
+                    <div class="nav-icon">🎮</div>
+                    <span>Games</span>
+                </a>
+                <a href="categories.html">
+                    <div class="nav-icon">📁</div>
+                    <span>Categories</span>
+                </a>
+                <a href="products.html" class="active">
+                    <div class="nav-icon">💎</div>
+                    <span>Products</span>
+                </a>
+                
+                <div class="sidebar-section-label">Media & Assets</div>
+                <a href="icons.html">
+                    <div class="nav-icon">🖼️</div>
+                    <span>Icons</span>
+                </a>
+                <a href="banners.html">
+                    <div class="nav-icon">🎞️</div>
+                    <span>Banners</span>
+                </a>
+                <a href="socials.html">
+                    <div class="nav-icon">🌐</div>
+                    <span>Socials</span>
+                </a>
+
+                <div class="sidebar-section-label">Configuration</div>
+                <a href="messages.html">
+                    <div class="nav-icon">✉️</div>
+                    <span>Messages</span>
+                </a>
+                <a href="whatsapp.html">
+                    <div class="nav-icon">📱</div>
+                    <span>WhatsApp</span>
+                </a>
+                <a href="contact-edit.html">
+                    <div class="nav-icon">📞</div>
+                    <span>Contact Info</span>
+                </a>
+                <a href="settings.html">
+                    <div class="nav-icon">⚙️</div>
+                    <span>Settings</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button class="btn-logout-sidebar" id="btnLogoutSidebar">
+                    <span>🚪</span> Logout
+                </button>
+            </div>
+        </aside>
+
+        <main class="admin-main">
+            <header class="admin-topbar">
+                <div class="topbar-left">
+                    <button class="btn-menu-toggle" id="menuToggle">☰</button>
+                    <h1 class="topbar-title">Manage Products</h1>
+                </div>
+                <div class="topbar-right">
+                    <div class="admin-info">
+                        <div class="admin-avatar">N</div>
+                        <span class="admin-name">Admin</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="admin-content fade-in">
+                <div class="page-header">
+                    <div>
+                        <h2 class="page-title">Daftar Produk / Nominal</h2>
+                        <p class="page-subtitle">Kelola item top-up dan harga untuk setiap game</p>
+                    </div>
+                    <button class="btn btn-primary" id="btnAddNew">
+                        <span>+</span> Tambah Produk
+                    </button>
+                </div>
+
+                <div class="table-container">
+                    <div class="table-header">
+                        <h3 class="table-title">Semua Produk</h3>
+                        <div class="table-search">
+                            <span class="search-icon">🔍</span>
+                            <input type="text" id="tableSearch" placeholder="Cari nama produk...">
+                        </div>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Icon</th>
+                                <th>Nama Produk</th>
+                                <th>Harga</th>
+                                <th>Game Terkait</th>
+                                <th>Urutan</th>
+                                <th>Status</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="productsTableBody">
+                            <tr>
+                                <td colspan="7" style="text-align: center; padding: 20px;">Memuat data produk...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="modal-overlay" id="modalProduct">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Tambah Produk</h3>
+                <button class="btn-modal-close" id="btnCloseModal">✕</button>
+            </div>
+            <form id="formProduct">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label">Icon Produk (Opsional)</label>
+                        <div class="upload-area" onclick="document.getElementById('productIconFile').click()">
+                            <input type="file" id="productIconFile" hidden accept="image/*">
+                            <div class="upload-icon">💎</div>
+                            <p class="upload-text">Klik untuk <span>pilih file</span> icon produk</p>
+                            <div class="upload-preview">
+                                <img id="iconPreview" src="" style="display: none; max-height: 80px;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="productName">Nama Produk <span class="required">*</span></label>
+                            <input type="text" id="productName" class="form-control" placeholder="Contoh: 86 Diamonds" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="productPrice">Harga (Rp) <span class="required">*</span></label>
+                            <input type="number" id="productPrice" class="form-control" placeholder="Contoh: 20000" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="productGame">Pilih Game <span class="required">*</span></label>
+                        <select id="productGame" class="form-control" required>
+                            <option value="">Pilih Game</option>
+                            </select>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="productOrder">Urutan Tampil</label>
+                            <input type="number" id="productOrder" class="form-control" value="0">
+                        </div>
+                        <div class="form-group" style="display: flex; align-items: flex-end; padding-bottom: 12px;">
+                            <label class="toggle-switch-container" style="display: flex; align-items: center; gap: 12px; cursor: pointer; width: 100%;">
+                                <span class="form-label" style="margin-bottom: 0;">Status Aktif</span>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="productStatus" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="document.getElementById('btnCloseModal').click()">Batal</button>
+                    <button type="submit" id="btnSubmit" class="btn btn-primary">Simpan Produk</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <script type="module" src="../js/admin/products.js"></script>
+    <script>
+        // UI Interaction Logic
+        const menuToggle = document.getElementById('menuToggle');
+        const adminSidebar = document.getElementById('adminSidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+        if(menuToggle) {
+            menuToggle.onclick = () => {
+                adminSidebar.classList.toggle('open');
+                sidebarOverlay.classList.toggle('active');
+            };
+        }
+        if(sidebarOverlay) {
+            sidebarOverlay.onclick = () => {
+                adminSidebar.classList.remove('open');
+                sidebarOverlay.classList.remove('active');
+            };
+        }
+
+        // Table Search Filter
+        document.getElementById('tableSearch').onkeyup = function() {
+            let filter = this.value.toUpperCase();
+            let rows = document.getElementById("productsTableBody").getElementsByTagName("tr");
+            for (let i = 0; i < rows.length; i++) {
+                let tdName = rows[i].getElementsByTagName("td")[1];
+                let tdGame = rows[i].getElementsByTagName("td")[3];
+                if (tdName || tdGame) {
+                    let nameVal = tdName ? tdName.textContent || tdName.innerText : "";
+                    let gameVal = tdGame ? tdGame.textContent || tdGame.innerText : "";
+                    rows[i].style.display = (nameVal.toUpperCase().indexOf(filter) > -1 || gameVal.toUpperCase().indexOf(filter) > -1) ? "" : "none";
+                }
+            }
+        }
+    </script>
+</body>
+</html>
