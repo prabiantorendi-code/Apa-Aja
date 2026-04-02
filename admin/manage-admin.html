@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kelola Admin - Naufal Gaming Studio</title>
+    <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body>
+    <div class="admin-wrapper">
+        <aside class="admin-sidebar" id="adminSidebar">
+            <div class="sidebar-logo">
+                <div class="admin-avatar" style="width: 36px; height: 36px;">N</div>
+                <span>NAUFAL <em>STUDIO</em></span>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <div class="sidebar-section-label">Main Menu</div>
+                <a href="dashboard.html"><div class="nav-icon">📊</div><span>Dashboard</span></a>
+                <a href="games.html"><div class="nav-icon">🎮</div><span>Games</span></a>
+                <a href="categories.html"><div class="nav-icon">📁</div><span>Categories</span></a>
+                <a href="products.html"><div class="nav-icon">💎</div><span>Products</span></a>
+                
+                <div class="sidebar-section-label">Media & Assets</div>
+                <a href="icons.html"><div class="nav-icon">🖼️</div><span>Icons</span></a>
+                <a href="banners.html"><div class="nav-icon">🎞️</div><span>Banners</span></a>
+                <a href="socials.html"><div class="nav-icon">🌐</div><span>Socials</span></a>
+
+                <div class="sidebar-section-label">Configuration</div>
+                <a href="messages.html"><div class="nav-icon">✉️</div><span>Messages</span></a>
+                <a href="whatsapp.html"><div class="nav-icon">📱</div><span>WhatsApp</span></a>
+                <a href="contact-edit.html"><div class="nav-icon">📞</div><span>Contact Info</span></a>
+                <a href="settings.html"><div class="nav-icon">⚙️</div><span>Settings</span></a>
+                <a href="manage-admin.html" class="active"><div class="nav-icon">👥</div><span>Manage Admin</span></a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button class="btn-logout-sidebar" id="btnLogoutSidebar"><span>🚪</span> Logout</button>
+            </div>
+        </aside>
+
+        <main class="admin-main">
+            <header class="admin-topbar">
+                <div class="topbar-left">
+                    <button class="btn-menu-toggle" id="menuToggle">☰</button>
+                    <h1 class="topbar-title">Administrator Management</h1>
+                </div>
+            </header>
+
+            <div class="admin-content fade-in">
+                <div class="page-header">
+                    <div>
+                        <h2 class="page-title">User Administrator</h2>
+                        <p class="page-subtitle">Informasi akun yang memiliki akses ke panel ini</p>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <div class="table-header">
+                        <h3 class="table-title">Admin Saat Ini</h3>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Avatar</th>
+                                <th>Email</th>
+                                <th>Status</th>
+                                <th>Last Login</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminListBody">
+                            </tbody>
+                    </table>
+                </div>
+
+                <div class="info-box" style="margin-top: 32px; border: 1px solid var(--border-color); padding: 24px;">
+                    <h4 style="color: white; margin-bottom: 12px;">Cara Menambah Admin Baru?</h4>
+                    <p class="text-muted" style="font-size: 14px; line-height: 1.6;">
+                        Untuk alasan keamanan tingkat tinggi, penambahan admin baru hanya dapat dilakukan melalui konsol <strong>Firebase Authentication</strong> oleh pemilik database utama.
+                        <br><br>
+                        1. Buka <a href="https://console.firebase.google.com/" target="_blank" style="color: var(--color-cyan);">Firebase Console</a>.<br>
+                        2. Pilih menu <strong>Authentication</strong> > <strong>Users</strong>.<br>
+                        3. Klik <strong>Add User</strong> dan masukkan email serta password untuk admin baru.
+                    </p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script type="module">
+        import { auth } from "../js/firebase-config.js";
+        import { checkAuthState, logoutAdmin } from "../js/auth.js";
+        
+        checkAuthState(true);
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const tbody = document.getElementById("adminListBody");
+            const btnLogout = document.getElementById("btnLogoutSidebar");
+
+            if(btnLogout) btnLogout.addEventListener("click", () => logoutAdmin());
+
+            // Tampilkan admin yang sedang login saat ini
+            auth.onAuthStateChanged(user => {
+                if(user) {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td><div class="admin-avatar" style="width: 32px; height: 32px; font-size: 14px;">${user.email.charAt(0).toUpperCase()}</div></td>
+                            <td><span style="color: white; font-weight: 500;">${user.email}</span></td>
+                            <td><span class="badge badge-active">Active (You)</span></td>
+                            <td>${user.metadata.lastSignInTime || 'Baru saja'}</td>
+                        </tr>
+                    `;
+                }
+            });
+        });
+
+        // Toggle Sidebar Mobile
+        document.getElementById('menuToggle').onclick = () => {
+            document.getElementById('adminSidebar').classList.toggle('open');
+        };
+    </script>
+</body>
+</html>
+
