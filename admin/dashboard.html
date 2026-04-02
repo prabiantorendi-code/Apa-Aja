@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Admin - Naufal Gaming Studio</title>
+    <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body>
+    <div class="admin-wrapper">
+        <aside class="admin-sidebar" id="adminSidebar">
+            <div class="sidebar-logo">
+                <div class="admin-avatar" style="width: 36px; height: 36px;">N</div>
+                <span>NAUFAL <em>STUDIO</em></span>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <div class="sidebar-section-label">Main Menu</div>
+                <a href="dashboard.html" class="active">
+                    <div class="nav-icon">📊</div>
+                    <span>Dashboard</span>
+                </a>
+                <a href="games.html">
+                    <div class="nav-icon">🎮</div>
+                    <span>Games</span>
+                </a>
+                <a href="categories.html">
+                    <div class="nav-icon">📁</div>
+                    <span>Categories</span>
+                </a>
+                <a href="products.html">
+                    <div class="nav-icon">💎</div>
+                    <span>Products</span>
+                </a>
+                
+                <div class="sidebar-section-label">Media & Assets</div>
+                <a href="icons.html">
+                    <div class="nav-icon">🖼️</div>
+                    <span>Icons</span>
+                </a>
+                <a href="banners.html">
+                    <div class="nav-icon">🎞️</div>
+                    <span>Banners</span>
+                </a>
+                <a href="socials.html">
+                    <div class="nav-icon">🌐</div>
+                    <span>Socials</span>
+                </a>
+
+                <div class="sidebar-section-label">Configuration</div>
+                <a href="messages.html">
+                    <div class="nav-icon">✉️</div>
+                    <span>Messages</span>
+                </a>
+                <a href="whatsapp.html">
+                    <div class="nav-icon">📱</div>
+                    <span>WhatsApp</span>
+                </a>
+                <a href="contact-edit.html">
+                    <div class="nav-icon">📞</div>
+                    <span>Contact Info</span>
+                </a>
+                <a href="settings.html">
+                    <div class="nav-icon">⚙️</div>
+                    <span>Settings</span>
+                </a>
+                <a href="manage-admin.html">
+                    <div class="nav-icon">👥</div>
+                    <span>Manage Admin</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button class="btn-logout-sidebar" id="btnLogoutSidebar">
+                    <span>🚪</span> Logout
+                </button>
+            </div>
+        </aside>
+
+        <main class="admin-main">
+            <header class="admin-topbar">
+                <div class="topbar-left">
+                    <button class="btn-menu-toggle" id="menuToggle">☰</button>
+                    <h1 class="topbar-title">Dashboard Overview</h1>
+                </div>
+                <div class="topbar-right">
+                    <div class="admin-info">
+                        <div class="admin-avatar" id="headerAvatar">N</div>
+                        <span class="admin-name" id="adminNameDisplay">Admin</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="admin-content fade-in">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon purple">🎮</div>
+                        <div>
+                            <div class="stat-value" id="countGames">0</div>
+                            <div class="stat-label">Total Games</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon cyan">📁</div>
+                        <div>
+                            <div class="stat-value" id="countCategories">0</div>
+                            <div class="stat-label">Categories</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon green">💎</div>
+                        <div>
+                            <div class="stat-value" id="countProducts">0</div>
+                            <div class="stat-label">Products</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon orange">🎞️</div>
+                        <div>
+                            <div class="stat-value" id="countBanners">0</div>
+                            <div class="stat-label">Banners</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-container" style="padding: 40px; text-align: center;">
+                    <h2 style="font-size: 24px; margin-bottom: 12px;">Selamat Datang, <span class="text-purple" id="welcomeAdmin">Admin</span>!</h2>
+                    <p class="text-muted" style="max-width: 600px; margin: 0 auto 24px;">Ini adalah panel kendali utama Naufal Gaming Studio. Gunakan menu di samping untuk mengelola konten website, produk top-up, dan pengaturan sistem.</p>
+                    <div class="flex-center gap-16">
+                        <a href="games.html" class="btn btn-primary">Kelola Game</a>
+                        <a href="../index.html" target="_blank" class="btn btn-secondary">Lihat Website</a>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <script type="module">
+        import { db, auth } from "../js/firebase-config.js";
+        import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { checkAuthState, logoutAdmin } from "../js/auth.js";
+
+        // Proteksi Halaman
+        checkAuthState(true);
+
+        document.addEventListener("DOMContentLoaded", () => {
+            initDashboard();
+            setupResponsive();
+        });
+
+        async function initDashboard() {
+            // Logout functionality
+            document.getElementById("btnLogoutSidebar").addEventListener("click", () => logoutAdmin());
+
+            // Set Admin Info dari Auth
+            auth.onAuthStateChanged(user => {
+                if(user) {
+                    const name = user.email.split('@')[0];
+                    document.getElementById("adminNameDisplay").innerText = name;
+                    document.getElementById("welcomeAdmin").innerText = name;
+                    document.getElementById("headerAvatar").innerText = name.charAt(0).toUpperCase();
+                }
+            });
+
+            // Load Statistik
+            loadStats();
+        }
+
+        async function loadStats() {
+            const collections = ["games", "categories", "products", "banners"];
+            
+            for (const col of collections) {
+                try {
+                    const snapshot = await getDocs(collection(db, col));
+                    const count = snapshot.size;
+                    
+                    const id = "count" + col.charAt(0).toUpperCase() + col.slice(1);
+                    const element = document.getElementById(id);
+                    if (element) element.innerText = count;
+                } catch (error) {
+                    console.error(`Gagal hitung ${col}:`, error);
+                }
+            }
+        }
+
+        function setupResponsive() {
+            const sidebar = document.getElementById("adminSidebar");
+            const overlay = document.getElementById("sidebarOverlay");
+            const toggle = document.getElementById("menuToggle");
+
+            toggle.addEventListener("click", () => {
+                sidebar.classList.toggle("open");
+                overlay.classList.toggle("active");
+            });
+
+            overlay.addEventListener("click", () => {
+                sidebar.classList.remove("open");
+                overlay.classList.remove("active");
+            });
+        }
+    </script>
+</body>
+</html>
