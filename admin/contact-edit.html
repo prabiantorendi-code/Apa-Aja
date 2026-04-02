@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Informasi Kontak - Naufal Gaming Studio</title>
+    <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body>
+    <div class="admin-wrapper">
+        <aside class="admin-sidebar" id="adminSidebar">
+            <div class="sidebar-logo">
+                <div class="admin-avatar" style="width: 36px; height: 36px;">N</div>
+                <span>NAUFAL <em>STUDIO</em></span>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <div class="sidebar-section-label">Main Menu</div>
+                <a href="dashboard.html">
+                    <div class="nav-icon">📊</div>
+                    <span>Dashboard</span>
+                </a>
+                <a href="games.html">
+                    <div class="nav-icon">🎮</div>
+                    <span>Games</span>
+                </a>
+                <a href="categories.html">
+                    <div class="nav-icon">📁</div>
+                    <span>Categories</span>
+                </a>
+                <a href="products.html">
+                    <div class="nav-icon">💎</div>
+                    <span>Products</span>
+                </a>
+                
+                <div class="sidebar-section-label">Media & Assets</div>
+                <a href="icons.html">
+                    <div class="nav-icon">🖼️</div>
+                    <span>Icons</span>
+                </a>
+                <a href="banners.html">
+                    <div class="nav-icon">🎞️</div>
+                    <span>Banners</span>
+                </a>
+                <a href="socials.html">
+                    <div class="nav-icon">🌐</div>
+                    <span>Socials</span>
+                </a>
+
+                <div class="sidebar-section-label">Configuration</div>
+                <a href="messages.html">
+                    <div class="nav-icon">✉️</div>
+                    <span>Messages</span>
+                </a>
+                <a href="whatsapp.html">
+                    <div class="nav-icon">📱</div>
+                    <span>WhatsApp</span>
+                </a>
+                <a href="contact-edit.html" class="active">
+                    <div class="nav-icon">📞</div>
+                    <span>Contact Info</span>
+                </a>
+                <a href="settings.html">
+                    <div class="nav-icon">⚙️</div>
+                    <span>Settings</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button class="btn-logout-sidebar" id="btnLogoutSidebar">
+                    <span>🚪</span> Logout
+                </button>
+            </div>
+        </aside>
+
+        <main class="admin-main">
+            <header class="admin-topbar">
+                <div class="topbar-left">
+                    <button class="btn-menu-toggle" id="menuToggle">☰</button>
+                    <h1 class="topbar-title">Contact Information</h1>
+                </div>
+                <div class="topbar-right">
+                    <div class="admin-info">
+                        <div class="admin-avatar">N</div>
+                        <span class="admin-name">Admin</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="admin-content fade-in">
+                <div class="page-header">
+                    <div>
+                        <h2 class="page-title">Informasi Halaman Kontak</h2>
+                        <p class="page-subtitle">Atur email, alamat, dan jam operasional yang tampil di website</p>
+                    </div>
+                </div>
+
+                <div class="table-container" style="padding: 32px; max-width: 700px;">
+                    <form id="formContact">
+                        <div class="form-group">
+                            <label class="form-label" for="contactEmail">Email Support</label>
+                            <input type="email" id="contactEmail" class="form-control" placeholder="naufal@example.com">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="contactHours">Jam Operasional</label>
+                            <input type="text" id="contactHours" class="form-control" placeholder="Contoh: 08:00 - 22:00 WIB">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="contactAddress">Alamat / Lokasi (Opsional)</label>
+                            <textarea id="contactAddress" class="form-control" style="height: 100px; resize: none;" placeholder="Masukkan alamat studio jika ada..."></textarea>
+                        </div>
+
+                        <div style="display: flex; justify-content: flex-end; margin-top: 32px;">
+                            <button type="submit" id="btnSubmit" class="btn btn-primary" style="padding: 12px 40px;">
+                                Simpan Informasi Kontak
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="info-box" style="margin-top: 24px; max-width: 700px; border: 1px dashed var(--border-color); padding: 16px;">
+                    <p class="text-muted" style="font-size: 13px;">
+                        Data di atas akan muncul secara otomatis di halaman <strong>Hubungi Kami</strong> dan bagian footer website Anda.
+                    </p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <script type="module" src="../js/admin/settings.js"></script>
+    <script>
+        const menuToggle = document.getElementById('menuToggle');
+        const adminSidebar = document.getElementById('adminSidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+        if(menuToggle) {
+            menuToggle.onclick = () => {
+                adminSidebar.classList.toggle('open');
+                sidebarOverlay.classList.toggle('active');
+            };
+        }
+        if(sidebarOverlay) {
+            sidebarOverlay.onclick = () => {
+                adminSidebar.classList.remove('open');
+                sidebarOverlay.classList.remove('active');
+            };
+        }
+    </script>
+</body>
+</html>
