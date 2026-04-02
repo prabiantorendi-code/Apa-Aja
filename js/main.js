@@ -1,6 +1,6 @@
 /* js/main.js */
 import { db } from "./firebase-config.js";
-import { collection, getDocs, doc, getDoc, query, orderBy, where } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+import { collection, getDocs, doc, getDoc, query, orderBy, where } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { sendToWhatsApp } from "./whatsapp.js";
 
 document.addEventListener("DOMContentLoaded", () => {
