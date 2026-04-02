@@ -1,7 +1,7 @@
 /* js/admin/banners.js */
 import { db, storage } from "../firebase-config.js";
 import { collection, addDoc, getDocs, doc, getDoc, updateDoc, deleteDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js";
+import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 import { checkAuthState, logoutAdmin } from "../auth.js";
 
 // Pastikan admin login
