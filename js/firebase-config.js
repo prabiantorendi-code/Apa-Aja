@@ -1,22 +1,16 @@
-/* js/firebase-config.js */
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-import { getFirestore } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
-import { getAuth } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-import { getStorage } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "ISI_API_KEY_FIREBASE_DISINI",
-  authDomain: "ISI_AUTH_DOMAIN_FIREBASE_DISINI",
-  projectId: "ISI_PROJECT_ID_FIREBASE_DISINI",
-  storageBucket: "ISI_STORAGE_BUCKET_FIREBASE_DISINI",
-  messagingSenderId: "ISI_MESSAGING_SENDER_ID_FIREBASE_DISINI",
-  appId: "ISI_APP_ID_FIREBASE_DISINI"
+  apiKey: "AIzaSyBQKEhdwpoPaoQgHDFRFtK1UZtfT31-T8o",
+  authDomain: "naufal-a8da4.firebaseapp.com",
+  projectId: "naufal-a8da4",
+  storageBucket: "naufal-a8da4.firebasestorage.app",
+  messagingSenderId: "400082079246",
+  appId: "1:400082079246:web:cd70ac32053a7b0797f65f"
 };
 
 const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const auth = getAuth(app);
-const storage = getStorage(app);
-
-export { app, db, auth, storage };
-
+export const auth = getAuth(app);
+export const db = getFirestore(app);
