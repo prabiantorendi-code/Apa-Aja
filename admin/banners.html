@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kelola Banner Slider - Naufal Gaming Studio</title>
+    <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body>
+    <div class="admin-wrapper">
+        <aside class="admin-sidebar" id="adminSidebar">
+            <div class="sidebar-logo">
+                <div class="admin-avatar" style="width: 36px; height: 36px;">N</div>
+                <span>NAUFAL <em>STUDIO</em></span>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <div class="sidebar-section-label">Main Menu</div>
+                <a href="dashboard.html">
+                    <div class="nav-icon">📊</div>
+                    <span>Dashboard</span>
+                </a>
+                <a href="games.html">
+                    <div class="nav-icon">🎮</div>
+                    <span>Games</span>
+                </a>
+                <a href="categories.html">
+                    <div class="nav-icon">📁</div>
+                    <span>Categories</span>
+                </a>
+                <a href="products.html">
+                    <div class="nav-icon">💎</div>
+                    <span>Products</span>
+                </a>
+                
+                <div class="sidebar-section-label">Media & Assets</div>
+                <a href="icons.html">
+                    <div class="nav-icon">🖼️</div>
+                    <span>Icons</span>
+                </a>
+                <a href="banners.html" class="active">
+                    <div class="nav-icon">🎞️</div>
+                    <span>Banners</span>
+                </a>
+                <a href="socials.html">
+                    <div class="nav-icon">🌐</div>
+                    <span>Socials</span>
+                </a>
+
+                <div class="sidebar-section-label">Configuration</div>
+                <a href="messages.html">
+                    <div class="nav-icon">✉️</div>
+                    <span>Messages</span>
+                </a>
+                <a href="whatsapp.html">
+                    <div class="nav-icon">📱</div>
+                    <span>WhatsApp</span>
+                </a>
+                <a href="contact-edit.html">
+                    <div class="nav-icon">📞</div>
+                    <span>Contact Info</span>
+                </a>
+                <a href="settings.html">
+                    <div class="nav-icon">⚙️</div>
+                    <span>Settings</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button class="btn-logout-sidebar" id="btnLogoutSidebar">
+                    <span>🚪</span> Logout
+                </button>
+            </div>
+        </aside>
+
+        <main class="admin-main">
+            <header class="admin-topbar">
+                <div class="topbar-left">
+                    <button class="btn-menu-toggle" id="menuToggle">☰</button>
+                    <h1 class="topbar-title">Manage Hero Banners</h1>
+                </div>
+                <div class="topbar-right">
+                    <div class="admin-info">
+                        <div class="admin-avatar">N</div>
+                        <span class="admin-name">Admin</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="admin-content fade-in">
+                <div class="page-header">
+                    <div>
+                        <h2 class="page-title">Banner Promo Website</h2>
+                        <p class="page-subtitle">Gambar besar yang muncul di slider halaman utama</p>
+                    </div>
+                    <button class="btn btn-primary" id="btnAddNew">
+                        <span>+</span> Tambah Banner
+                    </button>
+                </div>
+
+                <div class="table-container">
+                    <div class="table-header">
+                        <h3 class="table-title">Daftar Banner Aktif</h3>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Preview</th>
+                                <th>Judul (Title)</th>
+                                <th>Sub-Judul</th>
+                                <th>Urutan</th>
+                                <th>Status</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bannersTableBody">
+                            <tr>
+                                <td colspan="6" style="text-align: center; padding: 20px;">Memuat data banner...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="info-box" style="margin-top: 24px; border: 1px dashed var(--border-color); padding: 16px; border-radius: 12px;">
+                    <p class="text-muted" style="font-size: 13px;">
+                        <strong>💡 Tips Banner:</strong><br>
+                        - Rekomendasi ukuran banner: 1200px x 450px (Desktop) agar proporsional.<br>
+                        - Pastikan teks utama berada di area tengah/kiri agar tidak terpotong di perangkat mobile.<br>
+                        - Gunakan format .jpg atau .webp untuk loading yang lebih cepat.
+                    </p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="modal-overlay" id="modalBanner">
+        <div class="modal-box" style="max-width: 650px;">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Tambah Banner</h3>
+                <button class="btn-modal-close" id="btnCloseModal">✕</button>
+            </div>
+            <form id="formBanner">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label">Gambar Banner <span class="required">*</span></label>
+                        <div class="upload-area" onclick="document.getElementById('bannerImageFile').click()" style="height: 200px;">
+                            <input type="file" id="bannerImageFile" hidden accept="image/*">
+                            <div class="upload-icon">🎞️</div>
+                            <p class="upload-text">Klik untuk pilih gambar banner</p>
+                            <div class="upload-preview" style="width: 100%; height: 100%; padding: 10px;">
+                                <img id="imagePreview" src="" style="display: none; width: 100%; height: 100%; object-fit: cover; border-radius: 8px;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="bannerTitle">Judul Banner (Main Title)</label>
+                        <input type="text" id="bannerTitle" class="form-control" placeholder="Contoh: Promo Top Up Ramadhan">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="bannerSubtitle">Sub-Judul (Subtitle)</label>
+                        <input type="text" id="bannerSubtitle" class="form-control" placeholder="Contoh: Diskon hingga 50% untuk semua item">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="bannerOrder">Urutan Slide</label>
+                            <input type="number" id="bannerOrder" class="form-control" value="0">
+                        </div>
+                        <div class="form-group" style="display: flex; align-items: flex-end; padding-bottom: 10px;">
+                            <label class="toggle-switch-container" style="display: flex; align-items: center; gap: 12px; cursor: pointer;">
+                                <span class="form-label" style="margin-bottom: 0;">Status Aktif</span>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="bannerStatus" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="document.getElementById('btnCloseModal').click()">Batal</button>
+                    <button type="submit" id="btnSubmit" class="btn btn-primary">Simpan Banner</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <script type="module" src="../js/admin/banners.js"></script>
+    <script>
+        const menuToggle = document.getElementById('menuToggle');
+        const adminSidebar = document.getElementById('adminSidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+        if(menuToggle) {
+            menuToggle.onclick = () => {
+                adminSidebar.classList.toggle('open');
+                sidebarOverlay.classList.toggle('active');
+            };
+        }
+        if(sidebarOverlay) {
+            sidebarOverlay.onclick = () => {
+                adminSidebar.classList.remove('open');
+                sidebarOverlay.classList.remove('active');
+            };
+        }
+    </script>
+</body>
+</html>
