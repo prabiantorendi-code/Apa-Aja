@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pengaturan WhatsApp - Naufal Gaming Studio</title>
+    <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body>
+    <div class="admin-wrapper">
+        <aside class="admin-sidebar" id="adminSidebar">
+            <div class="sidebar-logo">
+                <div class="admin-avatar" style="width: 36px; height: 36px;">N</div>
+                <span>NAUFAL <em>STUDIO</em></span>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <div class="sidebar-section-label">Main Menu</div>
+                <a href="dashboard.html">
+                    <div class="nav-icon">📊</div>
+                    <span>Dashboard</span>
+                </a>
+                <a href="games.html">
+                    <div class="nav-icon">🎮</div>
+                    <span>Games</span>
+                </a>
+                <a href="categories.html">
+                    <div class="nav-icon">📁</div>
+                    <span>Categories</span>
+                </a>
+                <a href="products.html">
+                    <div class="nav-icon">💎</div>
+                    <span>Products</span>
+                </a>
+                
+                <div class="sidebar-section-label">Media & Assets</div>
+                <a href="icons.html">
+                    <div class="nav-icon">🖼️</div>
+                    <span>Icons</span>
+                </a>
+                <a href="banners.html">
+                    <div class="nav-icon">🎞️</div>
+                    <span>Banners</span>
+                </a>
+                <a href="socials.html">
+                    <div class="nav-icon">🌐</div>
+                    <span>Socials</span>
+                </a>
+
+                <div class="sidebar-section-label">Configuration</div>
+                <a href="messages.html">
+                    <div class="nav-icon">✉️</div>
+                    <span>Messages</span>
+                </a>
+                <a href="whatsapp.html" class="active">
+                    <div class="nav-icon">📱</div>
+                    <span>WhatsApp</span>
+                </a>
+                <a href="contact-edit.html">
+                    <div class="nav-icon">📞</div>
+                    <span>Contact Info</span>
+                </a>
+                <a href="settings.html">
+                    <div class="nav-icon">⚙️</div>
+                    <span>Settings</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button class="btn-logout-sidebar" id="btnLogoutSidebar">
+                    <span>🚪</span> Logout
+                </button>
+            </div>
+        </aside>
+
+        <main class="admin-main">
+            <header class="admin-topbar">
+                <div class="topbar-left">
+                    <button class="btn-menu-toggle" id="menuToggle">☰</button>
+                    <h1 class="topbar-title">WhatsApp Destination</h1>
+                </div>
+                <div class="topbar-right">
+                    <div class="admin-info">
+                        <div class="admin-avatar">N</div>
+                        <span class="admin-name">Admin</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="admin-content fade-in">
+                <div class="page-header">
+                    <div>
+                        <h2 class="page-title">Nomor WhatsApp Tujuan</h2>
+                        <p class="page-subtitle">Atur nomor WhatsApp yang akan menerima pesan pesanan dari pelanggan</p>
+                    </div>
+                </div>
+
+                <div class="table-container" style="padding: 32px; max-width: 600px;">
+                    <form id="formWhatsApp">
+                        <div class="form-group">
+                            <label class="form-label" for="whatsappNumber">Nomor WhatsApp Admin</label>
+                            <input type="text" id="whatsappNumber" class="form-control" placeholder="Contoh: 6285825319756" required>
+                            <div style="margin-top: 12px; padding: 16px; background: rgba(34, 211, 238, 0.05); border-radius: 10px; border: 1px solid rgba(34, 211, 238, 0.1);">
+                                <p class="text-muted" style="font-size: 12px; line-height: 1.5;">
+                                    <strong>Format Nomor:</strong><br>
+                                    - Gunakan kode negara di awal (Contoh: <strong>62</strong> untuk Indonesia).<br>
+                                    - Jangan gunakan spasi, tanda (+) atau tanda (-).<br>
+                                    - Contoh benar: <strong>6281234567890</strong>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; justify-content: flex-end; margin-top: 32px;">
+                            <button type="submit" id="btnSubmit" class="btn btn-primary" style="padding: 12px 40px;">
+                                Simpan Nomor WhatsApp
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="review-card" style="margin-top: 24px; max-width: 600px; border: 1px dashed var(--border-color);">
+                    <div style="display: flex; gap: 12px; align-items: center;">
+                        <span style="font-size: 20px;">🛡️</span>
+                        <p class="text-muted" style="font-size: 13px;">Nomor ini akan digunakan sebagai link tujuan saat tombol "Order" diklik oleh user di halaman detail game.</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <script type="module" src="../js/admin/settings.js"></script>
+    <script>
+        const menuToggle = document.getElementById('menuToggle');
+        const adminSidebar = document.getElementById('adminSidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+        if(menuToggle) {
+            menuToggle.onclick = () => {
+                adminSidebar.classList.toggle('open');
+                sidebarOverlay.classList.toggle('active');
+            };
+        }
+        if(sidebarOverlay) {
+            sidebarOverlay.onclick = () => {
+                adminSidebar.classList.remove('open');
+                sidebarOverlay.classList.remove('active');
+            };
+        }
+    </script>
+</body>
+</html>
