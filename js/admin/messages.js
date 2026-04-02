@@ -1,6 +1,6 @@
 /* js/admin/messages.js */
 import { db } from "../firebase-config.js";
-import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { checkAuthState, logoutAdmin } from "../auth.js";
 
 // Pastikan admin login
