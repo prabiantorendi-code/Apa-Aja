@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail Game - Naufal Gaming Studio</title>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    <div class="layout-wrapper">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                NAUFAL STUDIO
+            </div>
+            <div class="sidebar-menu">
+                <div class="sidebar-label">Menu Utama</div>
+                <a href="index.html" class="sidebar-item">
+                    <span class="icon">🏠</span>
+                    <span>Beranda</span>
+                </a>
+                <a href="index.html#games" class="sidebar-item active">
+                    <span class="icon">🎮</span>
+                    <span>Daftar Game</span>
+                </a>
+                <a href="contact.html" class="sidebar-item">
+                    <span class="icon">📞</span>
+                    <span>Kontak & Bantuan</span>
+                </a>
+                <div class="sidebar-label">Lainnya</div>
+                <a href="index.html#faq" class="sidebar-item">
+                    <span class="icon">❓</span>
+                    <span>FAQ</span>
+                </a>
+                <a href="index.html#terms" class="sidebar-item">
+                    <span class="icon">📄</span>
+                    <span>Syarat Ketentuan</span>
+                </a>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <nav class="navbar">
+                <div class="navbar-logo">NAUFAL GAMING</div>
+            </nav>
+
+            <div class="container">
+                <div class="review-card mb-40" style="display: flex; gap: 20px; align-items: center; padding: 30px 24px; background: linear-gradient(135deg, var(--bg-card), rgba(124, 58, 237, 0.05)); border: 1px solid var(--border-color);">
+                    <img id="gameIcon" src="https://via.placeholder.com/120" alt="Game Icon" style="width: 120px; height: 120px; border-radius: 20px; object-fit: cover; box-shadow: var(--shadow-glow);">
+                    <div>
+                        <h1 id="gameName" class="font-orbitron" style="font-size: 32px; font-weight: 900; color: white; margin-bottom: 8px;">Memuat...</h1>
+                        <p id="gameDesc" class="text-muted" style="font-size: 15px; line-height: 1.6; max-width: 600px;">Mohon tunggu, sedang mengambil data game dari server.</p>
+                        <div style="margin-top: 12px;">
+                            <span class="badge badge-green">⚡ Proses Cepat</span>
+                            <span class="badge badge-purple" style="margin-left: 8px;">🛡️ 100% Aman</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-header">
+                    <h2 class="section-title">1. Masukkan Data Akun</h2>
+                </div>
+                <div class="review-card mb-40">
+                    <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                        <div class="form-group" style="flex: 1; min-width: 250px; margin-bottom: 0;">
+                            <label class="form-label" for="userId">ID Pemain / User ID *</label>
+                            <input type="text" id="userId" class="form-input" placeholder="Masukkan ID Pemain Anda" autocomplete="off">
+                        </div>
+                        <div class="form-group" style="flex: 1; min-width: 250px; margin-bottom: 0;">
+                            <label class="form-label" for="zoneId">Server / Zone ID</label>
+                            <input type="text" id="zoneId" class="form-input" placeholder="(Opsional) Masukkan Zone ID / Server" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="info-box" style="margin-top: 16px; background: rgba(34, 211, 238, 0.08); border: 1px solid rgba(34, 211, 238, 0.2); padding: 12px 16px; border-radius: 8px; color: #22d3ee; font-size: 13px;">
+                        <strong>Petunjuk:</strong> Untuk mengetahui User ID Anda, silakan klik menu profile di kiri atas pada menu utama game.
+                    </div>
+                </div>
+
+                <div class="section-header">
+                    <h2 class="section-title">2. Pilih Nominal Top Up</h2>
+                </div>
+                <div class="products-grid" id="productsGrid">
+                    <p class="text-muted" style="grid-column: 1/-1;">Memuat daftar produk...</p>
+                </div>
+
+                <div class="section-header">
+                    <h2 class="section-title">3. Beli Sekarang</h2>
+                </div>
+                <div class="review-card mb-40" style="text-align: center; padding: 32px 20px;">
+                    <p class="text-muted mb-24" style="font-size: 15px;">Pastikan ID Game dan Produk yang Anda pilih sudah benar.<br>Klik tombol di bawah ini untuk mengarahkan pesanan Anda ke WhatsApp Admin.</p>
+                    
+                    <button id="btnOrder" class="btn btn-primary" style="width: 100%; max-width: 400px; height: 56px; font-size: 18px; border-radius: 14px;">
+                        🛒 Pesan via WhatsApp
+                    </button>
+                    
+                    <p style="margin-top: 16px; font-size: 12px; color: var(--color-muted);">Sistem akan otomatis membuat format pesan pesanan Anda.</p>
+                </div>
+
+                <footer class="footer">
+                    <div class="footer-grid">
+                        <div>
+                            <h3 class="footer-brand-name">NAUFAL GAMING</h3>
+                            <p class="footer-brand-desc">Platform top up game termurah, tercepat, dan terpercaya. Tampilan premium untuk pengalaman gaming yang maksimal.</p>
+                        </div>
+                        <div>
+                            <h4 class="footer-heading">Menu Cepat</h4>
+                            <ul class="footer-links">
+                                <li><a href="index.html">Beranda</a></li>
+                                <li><a href="index.html#games">Daftar Game</a></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="footer-heading">Bantuan</h4>
+                            <ul class="footer-links">
+                                <li><a href="contact.html">Hubungi Kami</a></li>
+                                <li><a href="index.html#faq">FAQ Umum</a></li>
+                                <li><a href="index.html#terms">Syarat Ketentuan</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="footer-bottom">
+                        <div>&copy; 2026 Naufal Gaming Studio. All rights reserved.</div>
+                    </div>
+                </footer>
+            </div>
+        </main>
+    </div>
+
+    <script type="module" src="js/firebase-config.js"></script>
+    <script type="module" src="js/whatsapp.js"></script>
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>
+
