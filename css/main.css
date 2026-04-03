@@ -1,396 +1,268 @@
 /* css/main.css */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600&display=swap');
+
 :root {
-  --bg-primary: #0b0812;
-  --bg-secondary: #130f23;
-  --bg-card: rgba(255, 255, 255, 0.04);
-  --bg-card-hover: rgba(168, 85, 247, 0.1);
-  --accent-purple: #a855f7;
-  --accent-pink: #ec4899;
-  --text-primary: #ffffff;
-  --text-secondary: #a0a0b8;
-  --border-neon: rgba(168, 85, 247, 0.25);
-  --glow: 0 0 20px rgba(168, 85, 247, 0.4);
+  --bg-base:       #0b0814;
+  --bg-surface:    #120e1f;
+  --bg-card:       rgba(255, 255, 255, 0.03);
+  --bg-sidebar:    #0b0814;
+  
+  --purple-l:      #a855f7;
+  --pink:          #ec4899;
+  --border-neon:   rgba(168, 85, 247, 0.2);
+  --purple-dim:    rgba(168, 85, 247, 0.12);
+  
+  --text-1:        #ffffff;
+  --text-2:        #a0a0b8;
+  --text-3:        #6b7280;
+  
+  --dur:           0.3s;
 }
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 
 body {
   font-family: 'Inter', sans-serif;
-  background-color: var(--bg-primary);
-  background-image: radial-gradient(ellipse at top right, rgba(168, 85, 247, 0.15), transparent 40%),
-                    radial-gradient(ellipse at bottom left, rgba(236, 72, 153, 0.1), transparent 40%);
-  color: var(--text-primary);
+  background-color: var(--bg-base);
+  color: var(--text-1);
   min-height: 100vh;
   overflow-x: hidden;
 }
 
 a { text-decoration: none; color: inherit; }
+ul { list-style: none; }
 
-/* -- LAYOUT -- */
+/* ───────────────────────────────────────────────
+   LAYOUT & SIDEBAR
+──────────────────────────────────────────────── */
 .layout-wrapper { display: flex; min-height: 100vh; }
 
-/* -- SIDEBAR -- */
 .sidebar {
   width: 250px;
-  background: rgba(11, 8, 18, 0.95);
-  backdrop-filter: blur(10px);
+  background: var(--bg-sidebar);
   border-right: 1px solid var(--border-neon);
-  position: fixed;
-  left: 0; top: 0; bottom: 0;
-  z-index: 200;
-  display: flex;
-  flex-direction: column;
-  transition: transform 0.3s ease;
-  overflow-y: auto;
+  position: fixed; left: 0; top: 0; bottom: 0;
+  z-index: 200; display: flex; flex-direction: column;
+  transition: transform var(--dur) ease; overflow-y: auto;
 }
-
 .sidebar-header {
-  padding: 24px 20px;
-  font-family: 'Orbitron', sans-serif;
-  font-weight: 900;
-  font-size: 16px;
-  color: var(--text-primary);
+  padding: 24px 20px; font-family: 'Orbitron', sans-serif;
+  font-weight: 900; font-size: 16px; color: var(--text-1);
   border-bottom: 1px solid var(--border-neon);
-  letter-spacing: 1px;
 }
-
 .sidebar-menu { padding: 16px 12px; }
 .sidebar-label {
-  font-size: 11px;
-  color: var(--text-secondary);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  padding: 12px 8px 8px;
-  font-weight: 600;
+  font-size: 11px; color: var(--text-3); text-transform: uppercase;
+  padding: 12px 8px 8px; font-weight: 600;
 }
-
 .sidebar-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px;
-  border-radius: 12px;
-  color: var(--text-secondary);
-  font-size: 14px;
-  font-weight: 500;
-  transition: all 0.3s ease;
-  border: 1px solid transparent;
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px; border-radius: 12px; color: var(--text-2);
+  font-size: 14px; font-weight: 500; transition: all var(--dur) ease;
+  border: 1px solid transparent; cursor: pointer;
 }
-
 .sidebar-item:hover, .sidebar-item.active {
-  background: var(--bg-card-hover);
-  color: var(--text-primary);
-  border-color: var(--border-neon);
+  background: var(--purple-dim); color: var(--text-1); border-color: var(--border-neon);
 }
-.sidebar-item.active { color: var(--accent-purple); }
+.sidebar-item.active { color: var(--purple-l); }
 .sidebar-item .icon { font-size: 18px; }
 
-/* -- MAIN CONTENT & NAVBAR -- */
-.main-content {
-  flex: 1;
-  margin-left: 250px;
-  display: flex;
-  flex-direction: column;
-}
+/* ───────────────────────────────────────────────
+   NAVBAR & MAIN CONTENT
+──────────────────────────────────────────────── */
+.main-content { flex: 1; margin-left: 250px; display: flex; flex-direction: column; }
 
 .navbar {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background: rgba(11, 8, 18, 0.85);
-  backdrop-filter: blur(16px);
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(11, 8, 20, 0.85); backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border-neon);
-  height: 65px;
-  display: flex;
-  align-items: center;
-  padding: 0 20px;
-  gap: 16px;
+  height: 65px; display: flex; align-items: center; padding: 0 20px; gap: 16px;
 }
-
-.hamburger {
-  display: none;
-  flex-direction: column;
-  gap: 5px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 5px;
-}
-.hamburger span {
-  width: 24px; height: 2px;
-  background: var(--text-primary);
-  border-radius: 2px;
-}
-
+.hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; }
+.hamburger span { width: 24px; height: 2px; background: var(--text-1); border-radius: 2px; }
 .navbar-logo {
-  font-family: 'Orbitron', sans-serif;
-  font-weight: 900;
-  font-size: 18px;
-  background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  letter-spacing: 1px;
+  font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: 18px;
+  background: linear-gradient(135deg, var(--purple-l), var(--pink));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
 }
-
 .navbar-search {
-  flex: 1;
-  max-width: 400px;
-  display: flex;
-  align-items: center;
-  background: rgba(255,255,255,0.05);
-  border: 1px solid var(--border-neon);
-  border-radius: 30px;
-  padding: 0 16px;
-  height: 40px;
-  margin-left: auto;
-  transition: all 0.3s ease;
-}
-.navbar-search:focus-within {
-  border-color: var(--accent-purple);
-  box-shadow: var(--glow);
+  flex: 1; max-width: 400px; display: flex; align-items: center;
+  background: rgba(255,255,255,0.05); border: 1px solid var(--border-neon);
+  border-radius: 30px; padding: 0 16px; height: 40px; margin-left: auto;
 }
 .navbar-search input {
-  flex: 1;
-  background: none;
-  border: none;
-  color: var(--text-primary);
-  font-family: 'Inter', sans-serif;
-  font-size: 13px;
-  outline: none;
-  margin-left: 8px;
+  flex: 1; background: none; border: none; color: var(--text-1);
+  font-family: 'Inter', sans-serif; font-size: 13px; outline: none; margin-left: 8px;
 }
 
-/* -- CONTAINER -- */
+/* ───────────────────────────────────────────────
+   CONTAINER & BANNER (INDEX.HTML)
+──────────────────────────────────────────────── */
 .container { padding: 24px; max-width: 1200px; margin: 0 auto; width: 100%; }
 
-/* -- BANNER -- */
 .banner-slider {
-  position: relative;
-  border-radius: 20px;
-  overflow: hidden;
-  border: 1px solid var(--border-neon);
-  aspect-ratio: 21 / 7;
-  background: linear-gradient(135deg, #1f103d, #0d081e);
-  margin-bottom: 32px;
+  position: relative; border-radius: 20px; overflow: hidden;
+  border: 1px solid var(--border-neon); aspect-ratio: 21 / 7;
+  background: linear-gradient(135deg, #1f103d, #0d081e); margin-bottom: 32px;
 }
-.banner-track {
-  display: flex;
-  height: 100%;
-  transition: transform 0.5s ease-in-out;
-}
-.banner-slide {
-  min-width: 100%;
-  position: relative;
-}
-.banner-slide img {
-  width: 100%; height: 100%;
-  object-fit: cover;
-}
+.banner-track { display: flex; height: 100%; transition: transform 0.5s ease-in-out; }
+.banner-slide { min-width: 100%; position: relative; }
+.banner-slide img { width: 100%; height: 100%; object-fit: cover; }
 .banner-slide-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to right, rgba(11,8,18,0.8), transparent);
-  display: flex;
-  align-items: center;
-  padding: 0 40px;
+  position: absolute; inset: 0; background: linear-gradient(to right, rgba(11,8,20,0.8), transparent);
+  display: flex; align-items: center; padding: 0 40px; pointer-events: none;
 }
-.banner-slide-title {
-  font-family: 'Orbitron', sans-serif;
-  font-size: clamp(18px, 4vw, 32px);
-  color: #fff;
-  text-shadow: 0 0 15px var(--accent-purple);
-}
+.banner-slide-title { font-family: 'Orbitron', sans-serif; font-size: clamp(18px, 4vw, 32px); color: #fff; }
 .banner-nav-btn {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 36px; height: 36px;
-  border-radius: 50%;
-  background: rgba(168, 85, 247, 0.2);
-  border: 1px solid var(--accent-purple);
-  color: #fff;
-  cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  backdrop-filter: blur(5px);
-  transition: all 0.3s ease;
+  position: absolute; top: 50%; transform: translateY(-50%);
+  width: 36px; height: 36px; border-radius: 50%; background: rgba(11,8,20,0.7);
+  border: 1px solid var(--border-neon); color: var(--text-1); cursor: pointer;
+  display: flex; align-items: center; justify-content: center; transition: all var(--dur) ease;
 }
-.banner-nav-btn:hover { background: var(--accent-purple); }
+.banner-nav-btn:hover { background: var(--purple-l); border-color: var(--purple-l); }
 .banner-nav-btn.prev { left: 16px; }
 .banner-nav-btn.next { right: 16px; }
 
-/* -- SECTION HEADER -- */
-.section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
-  margin-top: 24px;
-}
-.section-title {
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 20px;
-  font-weight: 700;
-  border-left: 4px solid var(--accent-purple);
-  padding-left: 12px;
-}
-.section-see-all {
-  font-size: 12px;
-  color: var(--accent-purple);
-  font-weight: 600;
-  cursor: pointer;
-}
+/* ───────────────────────────────────────────────
+   GAMES GRID (INDEX.HTML)
+──────────────────────────────────────────────── */
+.section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; margin-top: 24px; }
+.section-title { font-family: 'Rajdhani', sans-serif; font-size: 20px; font-weight: 700; border-left: 4px solid var(--purple-l); padding-left: 12px; }
+.section-see-all { font-size: 12px; color: var(--purple-l); font-weight: 600; cursor: pointer; }
 
-/* -- GAMES GRID (KUNCI AGAR CARD KECIL DI HP) -- */
-.games-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-  gap: 16px;
-  margin-bottom: 32px;
-}
-.loading-text { grid-column: 1/-1; text-align: center; font-size: 14px; }
+/* Desktop Grid */
+.games-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 16px; margin-bottom: 32px; }
+.loading-text { grid-column: 1/-1; text-align: center; font-size: 14px; color: var(--text-2); }
 
 .game-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border-neon);
-  border-radius: 16px;
-  overflow: hidden;
-  backdrop-filter: blur(10px);
-  transition: all 0.3s ease;
-  display: flex;
-  flex-direction: column;
+  display: flex; flex-direction: column; background: var(--bg-card);
+  border: 1px solid var(--border-neon); border-radius: 16px; overflow: hidden;
+  transition: transform var(--dur), border-color var(--dur); cursor: pointer;
 }
-.game-card:hover {
-  transform: translateY(-5px);
-  border-color: var(--accent-purple);
-  box-shadow: var(--glow);
-}
-.game-card-img {
-  width: 100%;
-  aspect-ratio: 1/1; /* Gambar kotak */
-  overflow: hidden;
-}
-.game-card-img img {
-  width: 100%; height: 100%;
-  object-fit: cover;
-  transition: transform 0.3s ease;
-}
+.game-card:hover { transform: translateY(-4px); border-color: var(--purple-l); }
+.game-card-img { width: 100%; aspect-ratio: 1/1; background: var(--bg-surface); overflow: hidden; }
+.game-card-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; }
 .game-card:hover .game-card-img img { transform: scale(1.05); }
 .game-card-name {
-  padding: 10px 8px;
-  text-align: center;
-  font-family: 'Rajdhani', sans-serif;
-  font-weight: 700;
-  font-size: 13px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  padding: 10px 8px; text-align: center; font-family: 'Rajdhani', sans-serif;
+  font-weight: 700; font-size: 13px; color: var(--text-1);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 
-/* -- REVIEWS & FAQ & TERMS -- */
-.reviews-grid, .faq-grid {
+/* ───────────────────────────────────────────────
+   HALAMAN DETAIL & ORDER (WAJIB ADA UNTUK JS)
+──────────────────────────────────────────────── */
+/* Grid Produk (Halaman Detail) */
+#productsGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 16px;
-  margin-bottom: 32px;
-}
-.review-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border-neon);
-  border-radius: 16px;
-  padding: 20px;
-  backdrop-filter: blur(10px);
-}
-.review-card-header {
-  display: flex;
-  align-items: center;
+  grid-template-columns: repeat(2, 1fr);
   gap: 12px;
-  margin-bottom: 12px;
+  margin-bottom: 24px;
 }
+
+/* Card Pilihan Harga */
+.product-card {
+  display: flex; align-items: center; gap: 12px; background: var(--bg-card);
+  border: 1px solid var(--border-neon); border-radius: 12px; padding: 14px;
+  cursor: pointer; transition: all var(--dur) ease;
+}
+.product-card:hover { border-color: rgba(168, 85, 247, 0.6); background: rgba(255,255,255,0.06); }
+
+/* Class 'selected' ditambahkan JS saat diklik */
+.product-card.selected { 
+  border-color: var(--purple-l); 
+  background: var(--purple-dim); 
+  box-shadow: 0 0 15px rgba(168, 85, 247, 0.2); 
+}
+.product-card-icon { width: 40px; height: 40px; border-radius: 8px; object-fit: cover; }
+.product-card-info { display: flex; flex-direction: column; gap: 4px; }
+.product-card-name { font-size: 14px; font-weight: 700; color: var(--text-1); font-family: 'Rajdhani', sans-serif; }
+.product-card-price { font-size: 13px; font-weight: 600; color: var(--purple-l); }
+
+/* Input ID Pemain & Form Order */
+.form-group { margin-bottom: 16px; }
+.form-label { display: block; margin-bottom: 8px; font-size: 14px; color: var(--text-2); }
+input[type="text"], input[type="number"], .form-control {
+  width: 100%; padding: 14px 16px; background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border-neon); border-radius: 8px;
+  color: var(--text-1); font-family: 'Inter', sans-serif;
+}
+input:focus, .form-control:focus { outline: none; border-color: var(--purple-l); background: rgba(255,255,255,0.08); }
+
+/* Tombol Pesan via WhatsApp */
+#btnOrder, .btn-primary {
+  display: block; width: 100%; padding: 16px;
+  background: linear-gradient(135deg, var(--purple-l), var(--pink));
+  color: white; border: none; border-radius: 12px; font-size: 16px;
+  font-weight: 700; font-family: 'Inter', sans-serif; cursor: pointer;
+  transition: opacity var(--dur); margin-top: 20px; text-align: center;
+}
+#btnOrder:hover, .btn-primary:hover { opacity: 0.9; }
+
+/* ───────────────────────────────────────────────
+   REVIEWS & FAQ
+──────────────────────────────────────────────── */
+.reviews-grid, .faq-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; margin-bottom: 32px; }
+.review-card { background: var(--bg-card); border: 1px solid var(--border-neon); border-radius: 16px; padding: 20px; }
+.review-card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
 .review-avatar {
-  width: 44px; height: 44px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
-  display: flex; align-items: center; justify-content: center;
-  font-family: 'Orbitron', sans-serif;
-  font-weight: bold; font-size: 18px;
+  width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, var(--purple-l), var(--pink));
+  display: flex; align-items: center; justify-content: center; font-family: 'Orbitron', sans-serif; font-weight: bold; font-size: 18px;
 }
 .review-name { font-weight: 600; font-family: 'Rajdhani', sans-serif; font-size: 16px; }
-.review-game { font-size: 12px; color: var(--text-secondary); }
+.review-game { font-size: 12px; color: var(--text-2); }
 .review-stars { color: #fca311; font-size: 14px; margin-bottom: 8px; letter-spacing: 2px; }
-.review-text { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
-
+.review-text { font-size: 13px; color: var(--text-2); line-height: 1.6; }
 .terms-card { margin-bottom: 40px; }
-.terms-list { padding-left: 20px; font-size: 13px; line-height: 1.8; color: var(--text-secondary); }
+.terms-list { padding-left: 20px; font-size: 13px; line-height: 1.8; color: var(--text-2); }
 
-/* -- FOOTER -- */
-.footer {
-  background: var(--bg-secondary);
-  border-top: 1px solid var(--border-neon);
-  padding: 40px 24px 20px;
-  border-radius: 24px 24px 0 0;
-}
-.footer-grid {
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1.5fr;
-  gap: 24px;
-  margin-bottom: 32px;
-}
-.footer-brand-name {
-  font-family: 'Orbitron', sans-serif;
-  color: var(--accent-purple);
-  margin-bottom: 12px; font-size: 18px;
-}
-.footer-brand-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
-.footer-heading {
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 15px; margin-bottom: 16px; letter-spacing: 1px;
-}
-.footer-links { list-style: none; }
+/* ───────────────────────────────────────────────
+   FOOTER
+──────────────────────────────────────────────── */
+.footer { background: var(--bg-surface); border-top: 1px solid var(--border-neon); padding: 40px 24px 20px; border-radius: 24px 24px 0 0; }
+.footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1.5fr; gap: 24px; margin-bottom: 32px; }
+.footer-brand-name { font-family: 'Orbitron', sans-serif; color: var(--purple-l); margin-bottom: 12px; font-size: 18px; }
+.footer-brand-desc { font-size: 13px; color: var(--text-3); line-height: 1.6; }
+.footer-heading { font-family: 'Rajdhani', sans-serif; font-size: 15px; margin-bottom: 16px; letter-spacing: 1px; color: var(--text-1); }
 .footer-links li { margin-bottom: 10px; }
-.footer-links a { font-size: 13px; color: var(--text-secondary); transition: color 0.3s; }
-.footer-links a:hover { color: var(--accent-purple); }
-.text-accent { color: var(--accent-purple); font-weight: 500; }
-.footer-bottom {
-  border-top: 1px solid rgba(255,255,255,0.05);
-  padding-top: 20px;
-  display: flex; justify-content: space-between;
-  font-size: 12px; color: var(--text-secondary);
-}
+.footer-links a { font-size: 13px; color: var(--text-2); transition: color var(--dur); }
+.footer-links a:hover { color: var(--purple-l); }
+.text-accent { color: var(--purple-l); font-weight: 500; }
+.text-muted { color: var(--text-3); }
+.footer-bottom { border-top: 1px solid var(--border-neon); padding-top: 20px; display: flex; justify-content: space-between; font-size: 12px; color: var(--text-3); }
 .footer-socials { display: flex; gap: 16px; }
+.footer-socials a { color: var(--text-3); transition: color var(--dur); }
+.footer-socials a:hover { color: var(--purple-l); }
 
-/* -- RESPONSIVE (MOBILE OPTIMIZATION) -- */
-.sidebar-overlay {
-  position: fixed; inset: 0; background: rgba(0,0,0,0.7);
-  z-index: 150; display: none;
-}
+/* ───────────────────────────────────────────────
+   RESPONSIVE (KHUSUS HP)
+──────────────────────────────────────────────── */
+.sidebar-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 150; display: none; }
 .sidebar-overlay.active { display: block; }
 
 @media (max-width: 768px) {
   .sidebar { transform: translateX(-100%); }
   .sidebar.open { transform: translateX(0); }
   .main-content { margin-left: 0; }
-  
   .hamburger { display: flex; }
   .navbar { padding: 0 16px; }
   .navbar-logo { font-size: 14px; }
-  .navbar-search { display: none; /* Sembunyikan search di navbar mobile, opsional bisa dipindah */ }
+  .navbar-search { display: none; }
   
   .container { padding: 16px; }
   .banner-slider { aspect-ratio: 16 / 7; border-radius: 12px; }
-  .banner-slide-title { font-size: 16px; }
   .banner-nav-btn { width: 30px; height: 30px; }
   
-  /* SETTING CARD GAME 3 KOLOM DI HP (KECIL) */
-  .games-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-  }
+  /* GRID GAME WAJIB 3 KOLOM KECIL DI HP */
+  .games-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
   .game-card { border-radius: 12px; }
   .game-card-name { font-size: 11px; padding: 6px; }
   
-  .reviews-grid, .faq-grid { grid-template-columns: 1fr; gap: 12px; }
+  /* Produk Detail (1 kolom memanjang di HP) */
+  #productsGrid { grid-template-columns: 1fr; }
   
+  .reviews-grid, .faq-grid { grid-template-columns: 1fr; gap: 12px; }
   .footer-grid { grid-template-columns: 1fr; gap: 20px; }
   .footer-bottom { flex-direction: column; align-items: center; gap: 12px; text-align: center; }
 }
