@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Naufal Gaming Studio - Top Up Game Aman & Terpercaya</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Orbitron:wght@700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
@@ -39,6 +42,11 @@
                     <span class="icon">📄</span>
                     <span>Syarat Ketentuan</span>
                 </a>
+                <div class="sidebar-label">Admin</div>
+                <a href="html/login.html" class="sidebar-item">
+                    <span class="icon">🔐</span>
+                    <span>Login Admin</span>
+                </a>
             </div>
         </aside>
 
@@ -51,7 +59,7 @@
                 </button>
                 <div class="navbar-logo">NAUFAL GAMING</div>
                 <div class="navbar-search">
-                    <span>🔍</span>
+                    <span class="search-icon">🔍</span>
                     <input type="text" id="searchInput" placeholder="Cari game favoritmu disini...">
                 </div>
             </nav>
@@ -75,7 +83,7 @@
                     <span class="section-see-all">Lihat Semua</span>
                 </div>
                 <div class="games-grid" id="gamesGrid">
-                    <p class="text-muted" style="grid-column: 1/-1; text-align: center;">Memuat daftar game...</p>
+                    <p class="text-muted loading-text">Memuat daftar game...</p>
                 </div>
 
                 <div class="section-header" id="reviews">
@@ -104,29 +112,18 @@
                         <div class="review-stars">★★★★★</div>
                         <div class="review-text">Harga lebih murah dari tempat lain. Adminnya ramah dan fast respon. Bakal jadi langganan.</div>
                     </div>
-                    <div class="review-card">
-                        <div class="review-card-header">
-                            <div class="review-avatar">C</div>
-                            <div>
-                                <div class="review-name">Citra Kirana</div>
-                                <div class="review-game">Genshin Impact</div>
-                            </div>
-                        </div>
-                        <div class="review-stars">★★★★★</div>
-                        <div class="review-text">Aman banget, welkin moon langsung aktif. Tampilannya juga keren gampang pakenya.</div>
-                    </div>
                 </div>
 
                 <div class="section-header" id="faq">
                     <h2 class="section-title">Pertanyaan Umum (FAQ)</h2>
                 </div>
-                <div class="games-grid" style="grid-template-columns: 1fr; gap: 16px; margin-bottom: 40px;">
+                <div class="faq-grid">
                     <div class="review-card">
-                        <div class="review-name" style="margin-bottom: 8px; font-size: 15px;">Bagaimana cara order?</div>
+                        <div class="review-name" style="margin-bottom: 8px;">Bagaimana cara order?</div>
                         <div class="review-text">Pilih game yang diinginkan, masukkan ID Game kamu, pilih nominal top up, lalu klik tombol order. Kamu akan diarahkan ke WhatsApp admin untuk menyelesaikan pembayaran.</div>
                     </div>
                     <div class="review-card">
-                        <div class="review-name" style="margin-bottom: 8px; font-size: 15px;">Berapa lama proses top up?</div>
+                        <div class="review-name" style="margin-bottom: 8px;">Berapa lama proses top up?</div>
                         <div class="review-text">Proses normal memakan waktu 1-5 menit setelah pembayaran dikonfirmasi oleh Admin Naufal Gaming Studio.</div>
                     </div>
                 </div>
@@ -134,20 +131,18 @@
                 <div class="section-header" id="terms">
                     <h2 class="section-title">Syarat & Ketentuan</h2>
                 </div>
-                <div class="review-card" style="margin-bottom: 60px;">
-                    <div class="review-text">
-                        <ul style="padding-left: 16px; line-height: 1.8; list-style-type: decimal;">
-                            <li>Pastikan ID Game dan Nickname yang dimasukkan sudah benar. Kesalahan input ID bukan tanggung jawab kami.</li>
-                            <li>Pembayaran yang sudah diproses tidak dapat di-refund atau dibatalkan dengan alasan apapun.</li>
-                            <li>Harga sewaktu-waktu dapat berubah tanpa pemberitahuan sebelumnya mengikuti kebijakan pusat.</li>
-                            <li>Dengan melakukan order, pembeli dianggap telah menyetujui seluruh syarat dan ketentuan yang berlaku.</li>
-                        </ul>
-                    </div>
+                <div class="review-card terms-card">
+                    <ul class="terms-list">
+                        <li>Pastikan ID Game dan Nickname yang dimasukkan sudah benar. Kesalahan input ID bukan tanggung jawab kami.</li>
+                        <li>Pembayaran yang sudah diproses tidak dapat di-refund atau dibatalkan dengan alasan apapun.</li>
+                        <li>Harga sewaktu-waktu dapat berubah tanpa pemberitahuan sebelumnya mengikuti kebijakan pusat.</li>
+                        <li>Dengan melakukan order, pembeli dianggap telah menyetujui seluruh syarat dan ketentuan yang berlaku.</li>
+                    </ul>
                 </div>
 
                 <footer class="footer">
                     <div class="footer-grid">
-                        <div>
+                        <div class="footer-brand-col">
                             <h3 class="footer-brand-name">NAUFAL GAMING</h3>
                             <p class="footer-brand-desc">Platform top up game termurah, tercepat, dan terpercaya. Tampilan premium untuk pengalaman gaming yang maksimal.</p>
                         </div>
@@ -170,15 +165,15 @@
                         <div>
                             <h4 class="footer-heading">Kontak Admin</h4>
                             <ul class="footer-links">
-                                <li><span class="text-muted">WA:</span> <span class="text-green">+62 858-2531-9756</span></li>
-                                <li><span class="text-muted">Email:</span> <a href="/cdn-cgi/l/email-protection#94faf5e1faf2f5f8f9f5fcf1faf0e6f5d4f3f9f5fdf8baf7fbf9"><span class="__cf_email__" data-cfemail="741a15011a12151819151c111a100615341319151d185a171b19">[email&#160;protected]</span></a></li>
+                                <li><span class="text-muted">WA:</span> <a href="https://wa.me/6285825319756" class="text-accent">+62 858-2531-9756</a></li>
+                                <li><span class="text-muted">Email:</span> <span class="text-accent">admin@naufalgaming.com</span></li>
                                 <li><span class="text-muted">Buka:</span> 08:00 - 22:00 WIB</li>
                             </ul>
                         </div>
                     </div>
                     <div class="footer-bottom">
                         <div>&copy; 2026 Naufal Gaming Studio. All rights reserved.</div>
-                        <div class="flex gap-16">
+                        <div class="footer-socials">
                             <a href="#">Instagram</a>
                             <a href="#">Facebook</a>
                             <a href="#">TikTok</a>
