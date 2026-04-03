@@ -2,27 +2,30 @@
 import { db } from "./firebase-config.js";
 import {
     collection, getDocs, doc, getDoc,
-    query, orderBy, where, addDoc
+    query, orderBy, where
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 /* ══════════════════════════════════════
-   INIT — jalankan semua saat halaman buka
+   INIT
 ══════════════════════════════════════ */
 document.addEventListener("DOMContentLoaded", () => {
     loadBanners();
     loadGames();
     initSearch();
+
+    // Kalau halaman detail game
+    if (document.getElementById("gameDetailName") ||
+        document.getElementById("productsGrid")) {
+        loadGameDetail();
+    }
 });
 
 /* ══════════════════════════════════════
-   LOAD BANNER SLIDER
+   LOAD BANNER
 ══════════════════════════════════════ */
 async function loadBanners() {
-    const sliderTrack = document.getElementById("bannerTrack");
-    const sliderWrap  = document.getElementById("bannerSlider");
-    if (!sliderTrack && !sliderWrap) return;
-
-    const target = sliderTrack || sliderWrap;
+    const track = document.getElementById("bannerTrack");
+    if (!track) return;
 
     try {
         let snapshot;
@@ -34,79 +37,87 @@ async function loadBanners() {
         }
 
         if (snapshot.empty) {
-            target.innerHTML = `<div class="banner-slide" style="display:flex;align-items:center;justify-content:center;color:#9ca3af;">Belum ada banner</div>`;
+            track.innerHTML = `
+                <div class="banner-slide">
+                    <div class="banner-slide-overlay">
+                        <h2 class="banner-slide-title">Naufal Gaming Studio</h2>
+                    </div>
+                </div>`;
             return;
         }
 
-        let html = "";
+        let slides = [];
         snapshot.forEach(docSnap => {
             const data = docSnap.data();
-            if (data.isActive !== false) {
-                html += `
-                    <div class="banner-slide">
-                        <img src="${data.imageUrl || ''}" 
-                             alt="${data.title || 'Banner'}"
-                             style="width:100%;height:100%;object-fit:cover;border-radius:12px;"
-                             onerror="this.style.display='none'">
-                        ${data.title ? `<div class="banner-caption">${data.title}</div>` : ''}
-                    </div>`;
-            }
+            if (data.isActive !== false) slides.push(data);
         });
 
-        target.innerHTML = html || `<div class="banner-slide" style="display:flex;align-items:center;justify-content:center;color:#9ca3af;">Belum ada banner aktif</div>`;
+        if (slides.length === 0) return;
 
-        // Auto slide jika lebih dari 1 banner
-        const slides = target.querySelectorAll(".banner-slide");
-        if (slides.length > 1) initSlider(slides);
+        track.innerHTML = slides.map(data => `
+            <div class="banner-slide">
+                ${data.imageUrl
+                    ? `<img src="${data.imageUrl}" alt="${data.title || 'Banner'}"
+                            style="width:100%;height:100%;object-fit:cover;"
+                            onerror="this.style.display='none'">`
+                    : ''}
+                <div class="banner-slide-overlay">
+                    <h2 class="banner-slide-title">${data.title || ''}</h2>
+                </div>
+            </div>`
+        ).join("");
+
+        // Dots
+        const dotsEl = document.getElementById("bannerDots");
+        if (dotsEl && slides.length > 1) {
+            dotsEl.innerHTML = slides.map((_, i) =>
+                `<span class="banner-dot${i === 0 ? ' active' : ''}" data-index="${i}"></span>`
+            ).join("");
+        }
+
+        if (slides.length > 1) initSlider();
 
     } catch (error) {
         console.error("Gagal memuat banner:", error);
-        if (target) target.innerHTML = `<div class="banner-slide"></div>`;
     }
 }
 
-function initSlider(slides) {
+function initSlider() {
+    const track    = document.getElementById("bannerTrack");
+    const slideEls = track ? track.querySelectorAll(".banner-slide") : [];
+    const dots     = document.querySelectorAll(".banner-dot");
+
+    // Pakai class selector — sesuai index.html
+    const btnPrev  = document.querySelector(".banner-nav-btn.prev");
+    const btnNext  = document.querySelector(".banner-nav-btn.next");
+
+    if (slideEls.length === 0) return;
+
     let current = 0;
-    const total = slides.length;
+    const total = slideEls.length;
 
     function showSlide(index) {
-        slides.forEach((s, i) => {
-            s.style.display = i === index ? "block" : "none";
-        });
+        current = (index + total) % total;
+        if (track) track.style.transform = `translateX(-${current * 100}%)`;
+        dots.forEach((d, i) => d.classList.toggle("active", i === current));
     }
 
-    showSlide(0);
-    setInterval(() => {
-        current = (current + 1) % total;
-        showSlide(current);
-    }, 4000);
+    if (btnPrev) btnPrev.addEventListener("click", () => showSlide(current - 1));
+    if (btnNext) btnNext.addEventListener("click", () => showSlide(current + 1));
 
-    // Tombol prev / next
-    const btnPrev = document.getElementById("btnPrev");
-    const btnNext = document.getElementById("btnNext");
-    if (btnPrev) btnPrev.addEventListener("click", () => {
-        current = (current - 1 + total) % total;
-        showSlide(current);
+    dots.forEach(dot => {
+        dot.addEventListener("click", () => showSlide(parseInt(dot.dataset.index)));
     });
-    if (btnNext) btnNext.addEventListener("click", () => {
-        current = (current + 1) % total;
-        showSlide(current);
-    });
+
+    setInterval(() => showSlide(current + 1), 4000);
 }
 
 /* ══════════════════════════════════════
-   LOAD DAFTAR GAME (Halaman Publik)
+   LOAD DAFTAR GAME
 ══════════════════════════════════════ */
 async function loadGames() {
-    // Cari elemen tampungan game — sesuaikan dengan id di index.html kamu
-    const container = document.getElementById("gamesGrid")
-                   || document.getElementById("gamesList")
-                   || document.getElementById("popularGames")
-                   || document.querySelector(".games-grid");
-
+    const container = document.getElementById("gamesGrid");
     if (!container) return;
-
-    container.innerHTML = `<p style="color:#9ca3af;text-align:center;">Memuat daftar game...</p>`;
 
     try {
         let snapshot;
@@ -118,7 +129,10 @@ async function loadGames() {
         }
 
         if (snapshot.empty) {
-            container.innerHTML = `<p style="color:#9ca3af;text-align:center;">Belum ada game tersedia.</p>`;
+            container.innerHTML = `
+                <p class="text-muted" style="grid-column:1/-1;text-align:center;">
+                    Belum ada game tersedia.
+                </p>`;
             return;
         }
 
@@ -130,7 +144,7 @@ async function loadGames() {
                 html += `
                     <a href="detail-game.html?id=${id}" class="game-card">
                         <div class="game-card-img">
-                            <img src="${data.iconUrl || ''}" 
+                            <img src="${data.iconUrl || ''}"
                                  alt="${data.name}"
                                  onerror="this.src='https://placehold.co/120x120?text=Game'">
                         </div>
@@ -139,88 +153,39 @@ async function loadGames() {
             }
         });
 
-        container.innerHTML = html || `<p style="color:#9ca3af;text-align:center;">Belum ada game aktif.</p>`;
+        container.innerHTML = html || `
+            <p class="text-muted" style="grid-column:1/-1;text-align:center;">
+                Belum ada game aktif.
+            </p>`;
 
     } catch (error) {
         console.error("Gagal memuat game:", error);
-        container.innerHTML = `<p style="color:#ef4444;text-align:center;">Gagal memuat game.</p>`;
+        container.innerHTML = `
+            <p style="grid-column:1/-1;text-align:center;color:#ef4444;">
+                Gagal memuat game.
+            </p>`;
     }
 }
 
 /* ══════════════════════════════════════
-   LOAD PRODUK (Halaman Detail Game)
+   SEARCH
 ══════════════════════════════════════ */
-async function loadProducts(gameId) {
-    const grid = document.getElementById("productsGrid");
-    if (!grid) return;
+function initSearch() {
+    const searchInput = document.getElementById("searchInput");
+    if (!searchInput) return;
 
-    grid.innerHTML = `<p style="color:#9ca3af;">Memuat produk...</p>`;
-
-    try {
-        const q = query(collection(db, "products"), where("gameId", "==", gameId));
-        const snapshot = await getDocs(q);
-
-        const docs = [];
-        snapshot.forEach(d => docs.push({ id: d.id, ...d.data() }));
-        docs.sort((a, b) => (a.order || 0) - (b.order || 0));
-
-        let productsHTML = "";
-        docs.forEach(p => {
-            if (p.isActive !== false) {
-                productsHTML += `
-                    <div class="product-card" data-id="${p.id}" data-name="${p.name}" data-price="${p.price}">
-                        ${p.iconUrl ? `<img src="${p.iconUrl}" class="product-card-icon" alt="${p.name}">` : '<span style="font-size:28px;">💎</span>'}
-                        <div class="product-card-info">
-                            <h4 class="product-card-name">${p.name}</h4>
-                            <span class="product-card-price">Rp ${parseInt(p.price).toLocaleString('id-ID')}</span>
-                        </div>
-                    </div>`;
-            }
-        });
-
-        if (productsHTML === "") {
-            grid.innerHTML = `<p class="text-muted">Belum ada produk untuk game ini.</p>`;
-        } else {
-            grid.innerHTML = productsHTML;
-            attachProductListeners();
-        }
-
-    } catch (error) {
-        console.error("Error fetching products:", error);
-        grid.innerHTML = `<p style="color:#ef4444;">Gagal memuat produk.</p>`;
-    }
-}
-
-/* ══════════════════════════════════════
-   PILIH PRODUK — highlight & simpan ke state
-══════════════════════════════════════ */
-function attachProductListeners() {
-    const cards = document.querySelectorAll(".product-card");
-    cards.forEach(card => {
-        card.addEventListener("click", () => {
-            // Hapus highlight lama
-            cards.forEach(c => c.classList.remove("selected"));
-            card.classList.add("selected");
-
-            // Simpan produk yang dipilih ke state global
-            window.selectedProduct = {
-                id    : card.dataset.id,
-                name  : card.dataset.name,
-                price : card.dataset.price
-            };
-
-            // Update ringkasan order jika ada
-            const summaryName  = document.getElementById("summaryProductName");
-            const summaryPrice = document.getElementById("summaryProductPrice");
-            if (summaryName)  summaryName.innerText  = card.dataset.name;
-            if (summaryPrice) summaryPrice.innerText  =
-                "Rp " + parseInt(card.dataset.price).toLocaleString('id-ID');
+    searchInput.addEventListener("input", (e) => {
+        const keyword = e.target.value.toLowerCase().trim();
+        const cards   = document.querySelectorAll(".game-card");
+        cards.forEach(card => {
+            const name = card.querySelector(".game-card-name")?.innerText.toLowerCase() || "";
+            card.style.display = name.includes(keyword) ? "" : "none";
         });
     });
 }
 
 /* ══════════════════════════════════════
-   LOAD DETAIL GAME (Halaman detail-game.html)
+   LOAD DETAIL GAME
 ══════════════════════════════════════ */
 async function loadGameDetail() {
     const params = new URLSearchParams(window.location.search);
@@ -231,9 +196,7 @@ async function loadGameDetail() {
     }
 
     try {
-        const docRef  = doc(db, "games", gameId);
-        const docSnap = await getDoc(docRef);
-
+        const docSnap = await getDoc(doc(db, "games", gameId));
         if (!docSnap.exists()) {
             window.location.href = "index.html";
             return;
@@ -241,16 +204,14 @@ async function loadGameDetail() {
 
         const data = docSnap.data();
 
-        // Isi elemen halaman
         const nameEl  = document.getElementById("gameDetailName");
         const iconEl  = document.getElementById("gameDetailIcon");
         const titleEl = document.querySelector("title");
 
-        if (nameEl)  nameEl.innerText   = data.name;
-        if (iconEl)  iconEl.src         = data.iconUrl || "";
-        if (titleEl) titleEl.innerText  = `Top Up ${data.name} | Naufal Gaming`;
+        if (nameEl)  nameEl.innerText  = data.name;
+        if (iconEl)  iconEl.src        = data.iconUrl || "";
+        if (titleEl) titleEl.innerText = `Top Up ${data.name} | Naufal Gaming`;
 
-        // Load produk untuk game ini
         loadProducts(gameId);
 
     } catch (error) {
@@ -259,27 +220,77 @@ async function loadGameDetail() {
 }
 
 /* ══════════════════════════════════════
-   SEARCH GAME
+   LOAD PRODUK
 ══════════════════════════════════════ */
-function initSearch() {
-    const searchInput = document.getElementById("searchInput")
-                     || document.querySelector("input[type='search']")
-                     || document.querySelector(".search-input");
+async function loadProducts(gameId) {
+    const grid = document.getElementById("productsGrid");
+    if (!grid) return;
 
-    if (!searchInput) return;
+    grid.innerHTML = `<p class="text-muted">Memuat produk...</p>`;
 
-    searchInput.addEventListener("input", (e) => {
-        const keyword = e.target.value.toLowerCase().trim();
-        const cards   = document.querySelectorAll(".game-card");
+    try {
+        const q        = query(collection(db, "products"), where("gameId", "==", gameId));
+        const snapshot = await getDocs(q);
 
-        cards.forEach(card => {
-            const name = card.querySelector(".game-card-name")?.innerText.toLowerCase() || "";
-            card.style.display = name.includes(keyword) ? "" : "none";
+        const docs = [];
+        snapshot.forEach(d => docs.push({ id: d.id, ...d.data() }));
+        docs.sort((a, b) => (a.order || 0) - (b.order || 0));
+
+        let html = "";
+        docs.forEach(p => {
+            if (p.isActive !== false) {
+                html += `
+                    <div class="product-card"
+                         data-id="${p.id}"
+                         data-name="${p.name}"
+                         data-price="${p.price}">
+                        ${p.iconUrl
+                            ? `<img src="${p.iconUrl}" class="product-card-icon" alt="${p.name}">`
+                            : `<span style="font-size:28px;">💎</span>`}
+                        <div class="product-card-info">
+                            <h4 class="product-card-name">${p.name}</h4>
+                            <span class="product-card-price">
+                                Rp ${parseInt(p.price).toLocaleString('id-ID')}
+                            </span>
+                        </div>
+                    </div>`;
+            }
         });
-    });
+
+        if (!html) {
+            grid.innerHTML = `<p class="text-muted">Belum ada produk untuk game ini.</p>`;
+        } else {
+            grid.innerHTML = html;
+            attachProductListeners();
+        }
+
+    } catch (error) {
+        console.error("Error fetching products:", error);
+        grid.innerHTML = `<p style="color:#ef4444;">Gagal memuat produk.</p>`;
+    }
 }
 
 /* ══════════════════════════════════════
-   EXPORT fungsi yang dipakai halaman lain
+   PILIH PRODUK
 ══════════════════════════════════════ */
-export { loadGameDetail, loadProducts };
+function attachProductListeners() {
+    const cards = document.querySelectorAll(".product-card");
+    cards.forEach(card => {
+        card.addEventListener("click", () => {
+            cards.forEach(c => c.classList.remove("selected"));
+            card.classList.add("selected");
+
+            window.selectedProduct = {
+                id    : card.dataset.id,
+                name  : card.dataset.name,
+                price : card.dataset.price
+            };
+
+            const summaryName  = document.getElementById("summaryProductName");
+            const summaryPrice = document.getElementById("summaryProductPrice");
+            if (summaryName)  summaryName.innerText  = card.dataset.name;
+            if (summaryPrice) summaryPrice.innerText =
+                "Rp " + parseInt(card.dataset.price).toLocaleString('id-ID');
+        });
+    });
+}
