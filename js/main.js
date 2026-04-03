@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
     initSearch();
 
     // Kalau halaman detail game
-    if (document.getElementById("gameDetailName") ||
+    if (document.getElementById("gameName") ||
         document.getElementById("productsGrid")) {
         loadGameDetail();
     }
@@ -204,11 +204,13 @@ async function loadGameDetail() {
 
         const data = docSnap.data();
 
-        const nameEl  = document.getElementById("gameDetailName");
-        const iconEl  = document.getElementById("gameDetailIcon");
+        const nameEl  = document.getElementById("gameName");
+        const iconEl  = document.getElementById("gameIcon");
         const titleEl = document.querySelector("title");
 
+        const descEl  = document.getElementById("gameDesc");
         if (nameEl)  nameEl.innerText  = data.name;
+        if (descEl)  descEl.innerText  = data.description || "Top up cepat, aman, dan terpercaya.";
         if (iconEl)  iconEl.src        = data.iconUrl || "";
         if (titleEl) titleEl.innerText = `Top Up ${data.name} | Naufal Gaming`;
 
