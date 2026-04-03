@@ -133,17 +133,11 @@
             </div>
             <form id="formGame">
                 <div class="modal-body">
-                    <div class="form-group">
-                        <label class="form-label">Icon Game <span class="required">*</span></label>
-                        <div class="upload-area" onclick="document.getElementById('gameIconFile').click()">
-                            <input type="file" id="gameIconFile" hidden accept="image/*">
-                            <div class="upload-icon">🖼️</div>
-                            <p class="upload-text">Klik untuk <span>pilih file</span> icon game</p>
-                            <div class="upload-preview" id="iconPreviewContainer">
-                                <img id="iconPreview" src="" style="display: none;">
-                            </div>
-                        </div>
-                    </div>
+                 <div class="form-group">
+    <label class="form-label" for="gameIconUrl">URL Icon Game</label>
+    <input type="url" id="gameIconUrl" class="form-control" placeholder="https://contoh.com/icon.png">
+    <small style="color: var(--text-muted);">Upload gambar ke imgbb.com lalu paste URL-nya di sini</small>
+</div>
 
                     <div class="form-group">
                         <label class="form-label" for="gameName">Nama Game <span class="required">*</span></label>
