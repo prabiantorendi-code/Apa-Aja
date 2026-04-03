@@ -9,19 +9,24 @@ import {
    INIT
 ══════════════════════════════════════ */
 document.addEventListener("DOMContentLoaded", () => {
-    loadBanners();
-    loadGames();
-    initSearch();
 
-    // Kalau halaman detail game
-    if (document.getElementById("gameName") ||
-        document.getElementById("productsGrid")) {
+    // Halaman index.html
+    if (document.getElementById("gamesGrid")) {
+        loadBanners();
+        loadGames();
+        initSearch();
+    }
+
+    // Halaman detail-game.html
+    // id="gameName" dan id="productsGrid" ada di detail-game.html
+    if (document.getElementById("gameName")) {
         loadGameDetail();
     }
+
 });
 
 /* ══════════════════════════════════════
-   LOAD BANNER
+   LOAD BANNER (index.html)
 ══════════════════════════════════════ */
 async function loadBanners() {
     const track = document.getElementById("bannerTrack");
@@ -56,18 +61,15 @@ async function loadBanners() {
 
         track.innerHTML = slides.map(data => `
             <div class="banner-slide">
-                ${data.imageUrl
-                    ? `<img src="${data.imageUrl}" alt="${data.title || 'Banner'}"
-                            style="width:100%;height:100%;object-fit:cover;"
-                            onerror="this.style.display='none'">`
-                    : ''}
+                ${data.imageUrl ? `<img src="${data.imageUrl}" alt="${data.title || 'Banner'}"
+                    style="width:100%;height:100%;object-fit:cover;"
+                    onerror="this.style.display='none'">` : ''}
                 <div class="banner-slide-overlay">
                     <h2 class="banner-slide-title">${data.title || ''}</h2>
                 </div>
             </div>`
         ).join("");
 
-        // Dots
         const dotsEl = document.getElementById("bannerDots");
         if (dotsEl && slides.length > 1) {
             dotsEl.innerHTML = slides.map((_, i) =>
@@ -83,13 +85,11 @@ async function loadBanners() {
 }
 
 function initSlider() {
-    const track    = document.getElementById("bannerTrack");
+    const track   = document.getElementById("bannerTrack");
     const slideEls = track ? track.querySelectorAll(".banner-slide") : [];
-    const dots     = document.querySelectorAll(".banner-dot");
-
-    // Pakai class selector — sesuai index.html
-    const btnPrev  = document.querySelector(".banner-nav-btn.prev");
-    const btnNext  = document.querySelector(".banner-nav-btn.next");
+    const dots    = document.querySelectorAll(".banner-dot");
+    const btnPrev = document.querySelector(".banner-nav-btn.prev");
+    const btnNext = document.querySelector(".banner-nav-btn.next");
 
     if (slideEls.length === 0) return;
 
@@ -104,7 +104,6 @@ function initSlider() {
 
     if (btnPrev) btnPrev.addEventListener("click", () => showSlide(current - 1));
     if (btnNext) btnNext.addEventListener("click", () => showSlide(current + 1));
-
     dots.forEach(dot => {
         dot.addEventListener("click", () => showSlide(parseInt(dot.dataset.index)));
     });
@@ -113,7 +112,7 @@ function initSlider() {
 }
 
 /* ══════════════════════════════════════
-   LOAD DAFTAR GAME
+   LOAD DAFTAR GAME (index.html)
 ══════════════════════════════════════ */
 async function loadGames() {
     const container = document.getElementById("gamesGrid");
@@ -129,10 +128,7 @@ async function loadGames() {
         }
 
         if (snapshot.empty) {
-            container.innerHTML = `
-                <p class="text-muted" style="grid-column:1/-1;text-align:center;">
-                    Belum ada game tersedia.
-                </p>`;
+            container.innerHTML = `<p class="text-muted" style="grid-column:1/-1;text-align:center;">Belum ada game tersedia.</p>`;
             return;
         }
 
@@ -144,31 +140,24 @@ async function loadGames() {
                 html += `
                     <a href="detail-game.html?id=${id}" class="game-card">
                         <div class="game-card-img">
-                            <img src="${data.iconUrl || ''}"
-                                 alt="${data.name}"
-                                 onerror="this.src='https://placehold.co/120x120?text=Game'">
+                            <img src="${data.iconUrl || ''}" alt="${data.name}"
+                                onerror="this.src='https://placehold.co/120x120?text=Game'">
                         </div>
                         <div class="game-card-name">${data.name}</div>
                     </a>`;
             }
         });
 
-        container.innerHTML = html || `
-            <p class="text-muted" style="grid-column:1/-1;text-align:center;">
-                Belum ada game aktif.
-            </p>`;
+        container.innerHTML = html || `<p class="text-muted" style="grid-column:1/-1;text-align:center;">Belum ada game aktif.</p>`;
 
     } catch (error) {
         console.error("Gagal memuat game:", error);
-        container.innerHTML = `
-            <p style="grid-column:1/-1;text-align:center;color:#ef4444;">
-                Gagal memuat game.
-            </p>`;
+        container.innerHTML = `<p style="grid-column:1/-1;text-align:center;color:#ef4444;">Gagal memuat game.</p>`;
     }
 }
 
 /* ══════════════════════════════════════
-   SEARCH
+   SEARCH (index.html)
 ══════════════════════════════════════ */
 function initSearch() {
     const searchInput = document.getElementById("searchInput");
@@ -185,11 +174,17 @@ function initSearch() {
 }
 
 /* ══════════════════════════════════════
-   LOAD DETAIL GAME
+   LOAD DETAIL GAME (detail-game.html)
+   ID sesuai detail-game.html:
+   - id="gameName"
+   - id="gameIcon"
+   - id="gameDesc"
+   - id="productsGrid"
 ══════════════════════════════════════ */
 async function loadGameDetail() {
     const params = new URLSearchParams(window.location.search);
     const gameId = params.get("id");
+
     if (!gameId) {
         window.location.href = "index.html";
         return;
@@ -197,6 +192,7 @@ async function loadGameDetail() {
 
     try {
         const docSnap = await getDoc(doc(db, "games", gameId));
+
         if (!docSnap.exists()) {
             window.location.href = "index.html";
             return;
@@ -204,17 +200,19 @@ async function loadGameDetail() {
 
         const data = docSnap.data();
 
+        // Isi info game — ID sesuai detail-game.html
         const nameEl  = document.getElementById("gameName");
         const iconEl  = document.getElementById("gameIcon");
+        const descEl  = document.getElementById("gameDesc");
         const titleEl = document.querySelector("title");
 
-        const descEl  = document.getElementById("gameDesc");
-        if (nameEl)  nameEl.innerText  = data.name;
-        if (descEl)  descEl.innerText  = data.description || "Top up cepat, aman, dan terpercaya.";
+        if (nameEl)  nameEl.innerText  = data.name || "Game";
         if (iconEl)  iconEl.src        = data.iconUrl || "";
+        if (descEl)  descEl.innerText  = data.description || "Top up cepat, aman, dan terpercaya.";
         if (titleEl) titleEl.innerText = `Top Up ${data.name} | Naufal Gaming`;
 
-        loadProducts(gameId);
+        // Load produk
+        await loadProducts(gameId);
 
     } catch (error) {
         console.error("Gagal memuat detail game:", error);
@@ -222,13 +220,13 @@ async function loadGameDetail() {
 }
 
 /* ══════════════════════════════════════
-   LOAD PRODUK
+   LOAD PRODUK (detail-game.html)
 ══════════════════════════════════════ */
 async function loadProducts(gameId) {
     const grid = document.getElementById("productsGrid");
     if (!grid) return;
 
-    grid.innerHTML = `<p class="text-muted">Memuat produk...</p>`;
+    grid.innerHTML = `<p class="text-muted" style="grid-column:1/-1;">Memuat produk...</p>`;
 
     try {
         const q        = query(collection(db, "products"), where("gameId", "==", gameId));
@@ -238,37 +236,33 @@ async function loadProducts(gameId) {
         snapshot.forEach(d => docs.push({ id: d.id, ...d.data() }));
         docs.sort((a, b) => (a.order || 0) - (b.order || 0));
 
-        let html = "";
-        docs.forEach(p => {
-            if (p.isActive !== false) {
-                html += `
-                    <div class="product-card"
-                         data-id="${p.id}"
-                         data-name="${p.name}"
-                         data-price="${p.price}">
-                        ${p.iconUrl
-                            ? `<img src="${p.iconUrl}" class="product-card-icon" alt="${p.name}">`
-                            : `<span style="font-size:28px;">💎</span>`}
-                        <div class="product-card-info">
-                            <h4 class="product-card-name">${p.name}</h4>
-                            <span class="product-card-price">
-                                Rp ${parseInt(p.price).toLocaleString('id-ID')}
-                            </span>
-                        </div>
-                    </div>`;
-            }
-        });
+        const aktif = docs.filter(p => p.isActive !== false);
 
-        if (!html) {
-            grid.innerHTML = `<p class="text-muted">Belum ada produk untuk game ini.</p>`;
-        } else {
-            grid.innerHTML = html;
-            attachProductListeners();
+        if (aktif.length === 0) {
+            grid.innerHTML = `<p class="text-muted" style="grid-column:1/-1;">Belum ada produk untuk game ini.</p>`;
+            return;
         }
 
+        grid.innerHTML = aktif.map(p => `
+            <div class="product-card"
+                 data-id="${p.id}"
+                 data-name="${p.name}"
+                 data-price="${p.price}">
+                ${p.iconUrl
+                    ? `<img src="${p.iconUrl}" class="product-card-icon" alt="${p.name}">`
+                    : `<span style="font-size:28px;">💎</span>`}
+                <div class="product-card-info">
+                    <h4 class="product-card-name">${p.name}</h4>
+                    <span class="product-card-price">Rp ${parseInt(p.price).toLocaleString('id-ID')}</span>
+                </div>
+            </div>`
+        ).join("");
+
+        attachProductListeners();
+
     } catch (error) {
-        console.error("Error fetching products:", error);
-        grid.innerHTML = `<p style="color:#ef4444;">Gagal memuat produk.</p>`;
+        console.error("Error memuat produk:", error);
+        grid.innerHTML = `<p style="grid-column:1/-1;color:#ef4444;">Gagal memuat produk: ${error.message}</p>`;
     }
 }
 
@@ -291,7 +285,7 @@ function attachProductListeners() {
             const summaryName  = document.getElementById("summaryProductName");
             const summaryPrice = document.getElementById("summaryProductPrice");
             if (summaryName)  summaryName.innerText  = card.dataset.name;
-            if (summaryPrice) summaryPrice.innerText =
+            if (summaryPrice) summaryPrice.innerText  =
                 "Rp " + parseInt(card.dataset.price).toLocaleString('id-ID');
         });
     });
