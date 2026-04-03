@@ -44,6 +44,11 @@
 
         <main class="main-content">
             <nav class="navbar">
+                <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
                 <div class="navbar-logo">NAUFAL GAMING</div>
                 <div class="navbar-search">
                     <span>🔍</span>
@@ -166,7 +171,7 @@
                             <h4 class="footer-heading">Kontak Admin</h4>
                             <ul class="footer-links">
                                 <li><span class="text-muted">WA:</span> <span class="text-green">+62 858-2531-9756</span></li>
-                                <li><span class="text-muted">Email:</span> <a href="mailto:naunfalmahendra@gmail.com">naunfalmahendra@gmail.com</a></li>
+                                <li><span class="text-muted">Email:</span> <a href="/cdn-cgi/l/email-protection#94faf5e1faf2f5f8f9f5fcf1faf0e6f5d4f3f9f5fdf8baf7fbf9"><span class="__cf_email__" data-cfemail="741a15011a12151819151c111a100615341319151d185a171b19">[email&#160;protected]</span></a></li>
                                 <li><span class="text-muted">Buka:</span> 08:00 - 22:00 WIB</li>
                             </ul>
                         </div>
@@ -184,7 +189,23 @@
         </main>
     </div>
 
-    <script type="module" src="js/firebase-config.js"></script>
-    <script type="module" src="js/main.js"></script>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <script src="js/firebase-config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/whatsapp.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        const hamburgerBtn = document.getElementById('hamburgerBtn');
+        const sidebar      = document.getElementById('sidebar');
+        const overlay      = document.getElementById('sidebarOverlay');
+
+        function openSidebar()  { sidebar.classList.add('open'); overlay.classList.add('active'); document.body.style.overflow = 'hidden'; }
+        function closeSidebar() { sidebar.classList.remove('open'); overlay.classList.remove('active'); document.body.style.overflow = ''; }
+
+        hamburgerBtn?.addEventListener('click', () => sidebar.classList.contains('open') ? closeSidebar() : openSidebar());
+        overlay?.addEventListener('click', closeSidebar);
+        document.querySelectorAll('.sidebar-item').forEach(i => i.addEventListener('click', () => { if(window.innerWidth < 768) closeSidebar(); }));
+    </script>
 </body>
 </html>
