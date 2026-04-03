@@ -4,6 +4,7 @@ import {
     collection, getDocs, doc, getDoc,
     query, orderBy, where
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { sendToWhatsApp } from "./whatsapp.js";
 
 /* ══════════════════════════════════════
    INIT
@@ -18,9 +19,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Halaman detail-game.html
-    // id="gameName" dan id="productsGrid" ada di detail-game.html
     if (document.getElementById("gameName")) {
         loadGameDetail();
+        initOrderButton();
     }
 
 });
@@ -61,9 +62,11 @@ async function loadBanners() {
 
         track.innerHTML = slides.map(data => `
             <div class="banner-slide">
-                ${data.imageUrl ? `<img src="${data.imageUrl}" alt="${data.title || 'Banner'}"
-                    style="width:100%;height:100%;object-fit:cover;"
-                    onerror="this.style.display='none'">` : ''}
+                ${data.imageUrl
+                    ? `<img src="${data.imageUrl}" alt="${data.title || 'Banner'}"
+                           style="width:100%;height:100%;object-fit:cover;"
+                           onerror="this.style.display='none'">`
+                    : ''}
                 <div class="banner-slide-overlay">
                     <h2 class="banner-slide-title">${data.title || ''}</h2>
                 </div>
@@ -85,11 +88,11 @@ async function loadBanners() {
 }
 
 function initSlider() {
-    const track   = document.getElementById("bannerTrack");
+    const track    = document.getElementById("bannerTrack");
     const slideEls = track ? track.querySelectorAll(".banner-slide") : [];
-    const dots    = document.querySelectorAll(".banner-dot");
-    const btnPrev = document.querySelector(".banner-nav-btn.prev");
-    const btnNext = document.querySelector(".banner-nav-btn.next");
+    const dots     = document.querySelectorAll(".banner-dot");
+    const btnPrev  = document.querySelector(".banner-nav-btn.prev");
+    const btnNext  = document.querySelector(".banner-nav-btn.next");
 
     if (slideEls.length === 0) return;
 
@@ -175,11 +178,6 @@ function initSearch() {
 
 /* ══════════════════════════════════════
    LOAD DETAIL GAME (detail-game.html)
-   ID sesuai detail-game.html:
-   - id="gameName"
-   - id="gameIcon"
-   - id="gameDesc"
-   - id="productsGrid"
 ══════════════════════════════════════ */
 async function loadGameDetail() {
     const params = new URLSearchParams(window.location.search);
@@ -200,7 +198,9 @@ async function loadGameDetail() {
 
         const data = docSnap.data();
 
-        // Isi info game — ID sesuai detail-game.html
+        // Simpan nama game untuk dipakai tombol WA
+        window.currentGameName = data.name || "Game";
+
         const nameEl  = document.getElementById("gameName");
         const iconEl  = document.getElementById("gameIcon");
         const descEl  = document.getElementById("gameDesc");
@@ -211,7 +211,6 @@ async function loadGameDetail() {
         if (descEl)  descEl.innerText  = data.description || "Top up cepat, aman, dan terpercaya.";
         if (titleEl) titleEl.innerText = `Top Up ${data.name} | Naufal Gaming`;
 
-        // Load produk
         await loadProducts(gameId);
 
     } catch (error) {
@@ -284,9 +283,47 @@ function attachProductListeners() {
 
             const summaryName  = document.getElementById("summaryProductName");
             const summaryPrice = document.getElementById("summaryProductPrice");
-            if (summaryName)  summaryName.innerText  = card.dataset.name;
-            if (summaryPrice) summaryPrice.innerText  =
+            if (summaryName)  summaryName.innerText = card.dataset.name;
+            if (summaryPrice) summaryPrice.innerText =
                 "Rp " + parseInt(card.dataset.price).toLocaleString('id-ID');
         });
+    });
+}
+
+/* ══════════════════════════════════════
+   TOMBOL PESAN VIA WHATSAPP
+   — ini yang sebelumnya tidak ada sama sekali
+══════════════════════════════════════ */
+function initOrderButton() {
+    const btnOrder = document.getElementById("btnOrder");
+    if (!btnOrder) return;
+
+    btnOrder.addEventListener("click", () => {
+        const userId  = document.getElementById("userId")?.value.trim();
+        const zoneId  = document.getElementById("zoneId")?.value.trim();
+        const product = window.selectedProduct;
+        const game    = window.currentGameName || "Game";
+
+        // Validasi user ID
+        if (!userId) {
+            alert("⚠️ Masukkan ID Pemain terlebih dahulu!");
+            document.getElementById("userId")?.focus();
+            return;
+        }
+
+        // Validasi produk dipilih
+        if (!product) {
+            alert("⚠️ Pilih nominal top up terlebih dahulu!");
+            return;
+        }
+
+        // Gabungkan userId + zoneId kalau ada
+        const fullUserId = zoneId ? `${userId} (Zone: ${zoneId})` : userId;
+
+        // Nomor WA admin — sesuai whatsapp.js fallback
+        const adminPhone = "6285825319756";
+
+        // Kirim ke WA
+        sendToWhatsApp(adminPhone, game, fullUserId, product.name);
     });
 }
