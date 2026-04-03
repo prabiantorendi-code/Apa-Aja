@@ -1,7 +1,6 @@
 /* js/admin/products.js */
-import { db, storage } from "../firebase-config.js";
+import { db } from "../firebase-config.js";
 import { collection, addDoc, getDocs, doc, getDoc, updateDoc, deleteDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 import { checkAuthState, logoutAdmin } from "../auth.js";
 
 // Pastikan admin login
@@ -9,7 +8,6 @@ checkAuthState(true);
 
 let isEditing = false;
 let editId = null;
-let selectedFile = null;
 let gamesMap = {};
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -20,13 +18,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     const btnAddNew = document.getElementById("btnAddNew");
     const btnCloseModal = document.getElementById("btnCloseModal");
     const formProduct = document.getElementById("formProduct");
-    const productIconFile = document.getElementById("productIconFile");
     const btnLogout = document.getElementById("btnLogoutSidebar");
 
     if (btnAddNew) btnAddNew.addEventListener("click", () => openModal());
     if (btnCloseModal) btnCloseModal.addEventListener("click", closeModal);
     if (formProduct) formProduct.addEventListener("submit", handleSaveProduct);
-    if (productIconFile) productIconFile.addEventListener("change", handleFileSelect);
     if (btnLogout) btnLogout.addEventListener("click", () => logoutAdmin());
 });
 
@@ -72,7 +68,7 @@ async function loadProducts() {
 
             html += `
                 <tr>
-                    <td><img src="${data.iconUrl || ''}" class="table-img" alt="icon"></td>
+                    <td><img src="${data.iconUrl || ''}" class="table-img" style="width: 40px; height: 40px; border-radius: 8px; object-fit: cover;" alt="icon"></td>
                     <td><strong>${data.name}</strong></td>
                     <td>Rp ${parseInt(data.price).toLocaleString('id-ID')}</td>
                     <td>${gameName}</td>
@@ -95,21 +91,6 @@ async function loadProducts() {
     }
 }
 
-function handleFileSelect(e) {
-    if (e.target.files && e.target.files.length > 0) {
-        selectedFile = e.target.files[0];
-        const reader = new FileReader();
-        reader.onload = function(event) {
-            const preview = document.getElementById("iconPreview");
-            if(preview) {
-                preview.src = event.target.result;
-                preview.style.display = "block";
-            }
-        };
-        reader.readAsDataURL(selectedFile);
-    }
-}
-
 async function handleSaveProduct(e) {
     e.preventDefault();
     
@@ -117,6 +98,7 @@ async function handleSaveProduct(e) {
     const name = document.getElementById("productName").value.trim();
     const price = parseInt(document.getElementById("productPrice").value) || 0;
     const gameId = document.getElementById("productGame").value;
+    const iconUrl = document.getElementById("productIconUrl").value.trim(); // Ambil dari input URL
     const order = parseInt(document.getElementById("productOrder").value) || 0;
     const isActive = document.getElementById("productStatus").checked;
     
@@ -129,16 +111,6 @@ async function handleSaveProduct(e) {
     btnSubmit.disabled = true;
 
     try {
-        let iconUrl = "";
-        const previewEl = document.getElementById("iconPreview");
-        if(previewEl) iconUrl = previewEl.src;
-        
-        if (selectedFile) {
-            const storageRef = ref(storage, `products/${Date.now()}_${selectedFile.name}`);
-            await uploadBytes(storageRef, selectedFile);
-            iconUrl = await getDownloadURL(storageRef);
-        }
-
         const productData = {
             name,
             price,
@@ -183,16 +155,10 @@ window.editProductData = async function(id) {
             document.getElementById("productName").value = data.name;
             document.getElementById("productPrice").value = data.price;
             document.getElementById("productGame").value = data.gameId || "";
+            document.getElementById("productIconUrl").value = data.iconUrl || "";
             document.getElementById("productOrder").value = data.order || 0;
             document.getElementById("productStatus").checked = data.isActive !== false;
             
-            const preview = document.getElementById("iconPreview");
-            if(preview) {
-                preview.src = data.iconUrl || '';
-                preview.style.display = data.iconUrl ? "block" : "none";
-            }
-            
-            selectedFile = null;
             openModal();
         }
     } catch (error) {
@@ -225,17 +191,9 @@ function closeModal() {
     const form = document.getElementById("formProduct");
     if(form) form.reset();
     
-    const preview = document.getElementById("iconPreview");
-    if(preview) {
-        preview.src = "";
-        preview.style.display = "none";
-    }
-    
-    selectedFile = null;
     isEditing = false;
     editId = null;
     
     const modalTitle = document.getElementById("modalTitle");
     if(modalTitle) modalTitle.innerText = "Tambah Produk";
 }
-
